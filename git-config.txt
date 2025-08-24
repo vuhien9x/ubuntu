@@ -1,0 +1,16 @@
+Kiểm tra user và email của git
+git config -l
+
+Cài đặt toàn cục:
+git config --global user.name "Tên Mới Của Bạn"
+git config --global user.email "emailmoi@example.com"
+
+Cài đặt cục bộ:
+git config user.name "nameNew"
+git config user.email "emailNew"
+
+user.name=Khanhvu
+user.email=khanh.hcm.vn@gmail.com
+
+user.name "vuhien9x"
+user.email "vuduyhien1992@gmail.com"
