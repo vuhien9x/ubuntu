@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cài đặt Node.js trên Ubuntu</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      margin: 2em auto;
+      max-width: 800px;
+      padding: 0 1em;
+      color: #333;
+      background-color: #f8f8f8;
+    }
+
+    h1 {
+      color: #444;
+      text-align: center;
+    }
+
+    h2 {
+      color: #555;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5em;
+      margin-top: 1.5em;
+    }
+
+    h3 {
+      color: #666;
+      margin-top: 1em;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 0.5em;
+      overflow-x: auto;
+      border: 1px solid #ccc;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    ol {
+      margin-bottom: 1em;
+    }
+
+    .important {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+
+    .note {
+      color: #1976d2;
+      font-style: italic;
+    }
+
+    .command {
+      background-color: #e0f7fa;
+      border-left: 5px solid #4dd0e1;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .output {
+      background-color: #fbe9e7;
+      border-left: 5px solid #ffab91;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .copy-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.25em 0.5em;
+      border: none;
+      cursor: pointer;
+      float: right;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Cài đặt Node.js trên Ubuntu</h1>
+
+  <p>
+    Hướng dẫn chi tiết cách cài đặt Node.js và npm (Node Package Manager) trên Ubuntu.
+  </p>
+
+  <h2>Bước 1: Cập nhật hệ thống</h2>
+
+  <p>
+    Đảm bảo hệ thống của bạn được cập nhật trước khi cài đặt bất kỳ phần mềm mới nào.
+  </p>
+
+  <ol>
+    <li>
+      Mở Terminal (Ctrl + Alt + T).
+    </li>
+    <li>
+      Cập nhật danh sách gói:
+      <div class="command">
+        <pre><code id="update-apt">sudo apt update</code></pre>
+        <button class="copy-button" onclick="copyText('update-apt')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Nâng cấp các gói đã cài đặt:
+      <div class="command">
+        <pre><code id="upgrade-apt">sudo apt upgrade -y</code></pre>
+        <button class="copy-button" onclick="copyText('upgrade-apt')">Sao chép</button>
+      </div>
+    </li>
+  </ol>
+
+  <h2>Bước 2: Cài đặt Node.js</h2>
+
+  <p>
+    Bạn có thể cài đặt Node.js từ kho lưu trữ mặc định của Ubuntu hoặc từ NodeSource. NodeSource thường cung cấp các
+    phiên bản Node.js mới hơn.
+  </p>
+
+  <h3>Cách 1: Cài đặt từ kho Ubuntu</h3>
+
+  <p>
+    Cách này đơn giản nhưng có thể không phải là phiên bản mới nhất.
+  </p>
+
+  <ol>
+    <li>
+      Cài đặt Node.js:
+      <div class="command">
+        <pre><code id="install-node-default">sudo apt install nodejs -y</code></pre>
+        <button class="copy-button" onclick="copyText('install-node-default')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Cài đặt npm (Node Package Manager):
+      <div class="command">
+        <pre><code id="install-npm-default">sudo apt install npm -y</code></pre>
+        <button class="copy-button" onclick="copyText('install-npm-default')">Sao chép</button>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Cách 2: Cài đặt từ NodeSource (Khuyến nghị)</h3>
+
+  <p>
+    Cách này cho phép bạn cài đặt các phiên bản Node.js cụ thể và thường là phiên bản mới nhất.
+  </p>
+
+  <ol>
+    <li>
+      Cài đặt curl (nếu chưa có):
+      <div class="command">
+        <pre><code id="install-curl">sudo apt install curl -y</code></pre>
+        <button class="copy-button" onclick="copyText('install-curl')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Thêm kho lưu trữ NodeSource. Ví dụ, để cài đặt Node.js 18.x:
+      <div class="command">
+        <pre><code id="add-nodesource">curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -</code></pre>
+        <button class="copy-button" onclick="copyText('add-nodesource')">Sao chép</button>
+      </div>
+      <p>
+        (Thay "18.x" bằng phiên bản bạn muốn, ví dụ "20.x", "16.x", v.v.)
+      </p>
+    </li>
+    <li>
+      Cài đặt Node.js:
+      <div class="command">
+        <pre><code id="install-node-nodesource">sudo apt install nodejs -y</code></pre>
+        <button class="copy-button" onclick="copyText('install-node-nodesource')">Sao chép</button>
+      </div>
+      <p>
+        (Lệnh này cũng sẽ cài đặt npm)
+      </p>
+    </li>
+  </ol>
+
+  <h2>Bước 3: Kiểm tra cài đặt</h2>
+
+  <p>
+    Xác minh rằng Node.js và npm đã được cài đặt thành công.
+  </p>
+
+  <ol>
+    <li>
+      Kiểm tra phiên bản Node.js:
+      <div class="command">
+        <pre><code id="check-node-version">node -v</code></pre>
+        <button class="copy-button" onclick="copyText('check-node-version')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Kiểm tra phiên bản npm:
+      <div class="command">
+        <pre><code id="check-npm-version">npm -v</code></pre>
+        <button class="copy-button" onclick="copyText('check-npm-version')">Sao chép</button>
+      </div>
+    </li>
+  </ol>
+
+  <h2>Kết quả</h2>
+
+  <p>
+    Bạn đã cài đặt thành công Node.js và npm trên Ubuntu! Bây giờ bạn có thể bắt đầu phát triển các ứng dụng JavaScript
+    phía máy chủ.
+  </p>
+
+  <script>
+    function copyText(elementId) {
+        const text = document.getElementById(elementId).textContent.trim();
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // Tạo một thông báo
+        const message = document.createElement('div');
+        message.textContent = 'Đã sao chép vào clipboard!';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = '#4CAF50';
+        message.style.color = 'white';
+        message.style.padding = '10px 20px';
+        message.style.borderRadius = '5px';
+        message.style.zIndex = '1000'; // Đảm bảo nó ở trên cùng
+
+        document.body.appendChild(message);
+
+        // Ẩn thông báo sau 1.5 giây
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 500); // Đợi khi hiệu ứng mờ kết thúc
+        }, 1500);
+    }
+  </script>
+</body>
+
+</html>

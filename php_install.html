@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng dẫn chi tiết cài đặt PHP trên Ubuntu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 2em auto;
+            max-width: 800px;
+            padding: 0 1em;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 0.5em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 1em;
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: 0.5em;
+            overflow-x: auto;
+            border: 1px solid #ccc;
+        }
+
+        code {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        ol {
+            margin-bottom: 1em;
+        }
+
+        .important {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .note {
+            color: #1976d2;
+            font-style: italic;
+        }
+
+        .command {
+            background-color: #e0f7fa;
+            border-left: 5px solid #4dd0e1;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .output {
+            background-color: #fbe9e7;
+            border-left: 5px solid #ffab91;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.25em 0.5em;
+            border: none;
+            cursor: pointer;
+            float: right;
+            border-radius: 5px;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Hướng dẫn chi tiết cài đặt PHP trên Ubuntu</h1>
+
+    <p>
+        Hướng dẫn này sẽ đưa bạn qua các bước cần thiết để cài đặt PHP trên hệ thống Ubuntu của bạn.
+    </p>
+
+    <h2>1. Cập nhật hệ thống</h2>
+
+    <p>
+        Trước khi cài đặt bất kỳ phần mềm mới nào, điều quan trọng là phải đảm bảo hệ thống của bạn được cập nhật.
+    </p>
+
+    <h3>Các bước thực hiện:</h3>
+
+    <ol>
+        <li>
+            Mở Terminal. Bạn có thể thực hiện việc này bằng cách nhấn <code>Ctrl + Alt + T</code>.
+        </li>
+        <li>
+            Chạy các lệnh sau:
+            <div class="command">
+                <pre><code id="command1">sudo apt update
+sudo apt upgrade -y</code></pre>
+                <button class="copy-button" onclick="copyText('command1')">Sao chép</button>
+
+            </div>
+            <p>
+                Lệnh <code>sudo apt update</code> tải xuống thông tin gói mới nhất từ các kho lưu trữ.
+                Lệnh <code>sudo apt upgrade -y</code> cài đặt các phiên bản mới nhất của các gói đã cài đặt.
+                Tùy chọn <code>-y</code> tự động trả lời "yes" cho bất kỳ lời nhắc nào, giúp quá trình này tự động hơn.
+            </p>
+        </li>
+    </ol>
+
+    <h2>2. Cài đặt PHP</h2>
+
+    <p>
+        Bạn có thể cài đặt phiên bản PHP mặc định hoặc một phiên bản cụ thể.
+    </p>
+
+    <h3>2.1. Cài đặt phiên bản PHP mặc định</h3>
+
+    <p>
+        Để cài đặt phiên bản PHP mặc định có sẵn trong kho lưu trữ Ubuntu chính thức, hãy làm theo các bước sau:
+    </p>
+
+    <ol>
+        <li>
+            Chạy lệnh sau:
+            <div class="command">
+                <pre><code id="command2">sudo apt install php -y</code></pre>
+                <button class="copy-button" onclick="copyText('command2')">Sao chép</button>
+            </div>
+            <p>
+                Lệnh này sẽ cài đặt PHP và các phụ thuộc cần thiết.
+            </p>
+        </li>
+    </ol>
+
+    <h3>2.2. Cài đặt các module PHP phổ biến (Tùy chọn)</h3>
+
+    <p>
+        PHP có thể được mở rộng bằng các module. Dưới đây là một số module phổ biến mà bạn có thể muốn cài đặt:
+    </p>
+
+    <ol>
+        <li>
+            Chạy lệnh sau:
+            <div class="command">
+                <pre><code id="command3">sudo apt install php-cli php-mbstring php-xml php-mysql php-curl php-zip -y</code></pre>
+                <button class="copy-button"
+                    onclick="copyText('command3')">Sao
+                    chép</button>
+            </div>
+            <p>
+                Giải thích các module:
+            </p>
+            <ul>
+                <li>
+                    <code>php-cli</code>: Cho phép chạy PHP từ dòng lệnh.
+                </li>
+                <li>
+                    <code>php-mbstring</code>: Cung cấp hỗ trợ cho các hàm chuỗi đa byte.
+                </li>
+                <li>
+                    <code>php-xml</code>: Cho phép làm việc với các tài liệu XML.
+                </li>
+                <li>
+                    <code>php-mysql</code>: Cho phép PHP giao tiếp với cơ sở dữ liệu MySQL.
+                </li>
+                <li>
+                    <code>php-curl</code>: Cho phép PHP thực hiện các yêu cầu HTTP.
+                </li>
+                <li>
+                    <code>php-zip</code>: Cho phép PHP làm việc với các kho lưu trữ ZIP.
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3>2.3. Kiểm tra phiên bản PHP</h3>
+
+    <p>
+        Để xác minh rằng PHP đã được cài đặt thành công, hãy chạy lệnh sau:
+    </p>
+
+    <ol>
+        <li>
+            Chạy lệnh sau:
+            <div class="command">
+                <pre><code id="command4">php -v</code></pre>
+                <button class="copy-button" onclick="copyText('command4')">Sao chép</button>
+            </div>
+            <p>
+                Lệnh này sẽ hiển thị phiên bản PHP đã cài đặt.
+            </p>
+            <div class="output">
+                <pre><code>PHP 8.1.2 (cli) (built: Jan 19 2022 11:21:31) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.1.2, Copyright (c) Zend Technologies
+    with Zend OPcache v8.1.2, Copyright (c) Zend Technologies</code></pre>
+            </div>
+        </li>
+    </ol>
+
+    <h2>3. (Tùy chọn) Cài đặt một phiên bản PHP cụ thể</h2>
+
+    <p>
+        Nếu bạn cần một phiên bản PHP cụ thể (ví dụ: cho khả năng tương thích với một ứng dụng web), bạn có thể cài đặt
+        nó từ PPA (Personal Package Archive) của Ondřej Surý.
+    </p>
+
+    <div class="important">
+        <p>
+            Việc sử dụng PPA có thể bao gồm các rủi ro bảo mật tiềm ẩn. Hãy chắc chắn rằng bạn tin tưởng nguồn PPA trước
+            khi thêm nó vào hệ thống của mình.
+        </p>
+    </div>
+
+    <h3>3.1. Thêm PPA của Ondřej Surý</h3>
+
+    <ol>
+        <li>
+            Chạy các lệnh sau:
+            <div class="command">
+                <pre><code id="command5">sudo add-apt-repository ppa:ondrej/php
+sudo apt update</code></pre>
+                <button class="copy-button"
+                    onclick="copyText('command5')">Sao chép</button>
+            </div>
+            <p>
+                Lệnh <code>sudo add-apt-repository ppa:ondrej/php</code> thêm PPA vào danh sách các nguồn gói của bạn.
+                Lệnh <code>sudo apt update</code> cập nhật danh sách các gói có sẵn từ PPA mới được thêm vào.
+            </p>
+        </li>
+    </ol>
+
+    <h3>3.2. Cài đặt phiên bản PHP mong muốn</h3>
+
+    <ol>
+        <li>
+            Chạy lệnh sau để cài đặt phiên bản PHP mong muốn (ví dụ: PHP 7.4):
+            <div class="command">
+                <pre><code id="command6">sudo apt install php7.4 php7.4-cli php7.4-mbstring php7.4-xml php7.4-mysql -y</code></pre>
+                <button class="copy-button"
+                    onclick="copyText('command6')">Sao
+                    chép</button>
+            </div>
+            <div class="note">
+                <p>
+                    Thay thế <code>7.4</code> bằng phiên bản PHP mong muốn của bạn.
+                    Bạn cũng có thể cần cài đặt các module bổ sung cho phiên bản PHP cụ thể đó (ví dụ: `php7.4-curl`,
+                    `php7.4-zip`).
+                </p>
+            </div>
+        </li>
+    </ol>
+
+    <h3>3.3. Kiểm tra phiên bản PHP cụ thể</h3>
+
+    <ol>
+        <li>
+            Chạy lệnh sau để kiểm tra phiên bản PHP cụ thể:
+            <div class="command">
+                <pre><code id="command7">php7.4 -v</code></pre>
+                <button class="copy-button" onclick="copyText('command7')">Sao chép</button>
+            </div>
+            <div class="note">
+                <p>
+                    Thay thế <code>7.4</code> bằng phiên bản PHP bạn đã cài đặt.
+                </p>
+            </div>
+        </li>
+    </ol>
+
+    <h2>4. (Tùy chọn) Cài đặt máy chủ web</h2>
+
+    <p>
+        Nếu bạn định chạy các ứng dụng web PHP, bạn sẽ cần một máy chủ web. Hai lựa chọn phổ biến là Apache và Nginx.
+    </p>
+
+    <h3>4.1. Cài đặt Apache</h3>
+
+    <ol>
+        <li>
+            Chạy các lệnh sau:
+            <div class="command">
+                <pre><code id="command8">sudo apt install apache2 libapache2-mod-php -y
+sudo systemctl restart apache2</code></pre>
+                <button class="copy-button"
+                    onclick="copyText('command8')">Sao
+                    chép</button>
+            </div>
+            <p>
+                Lệnh <code>sudo apt install apache2 libapache2-mod-php -y</code> cài đặt Apache và module PHP cho
+                Apache.
+                Lệnh <code>sudo systemctl restart apache2</code> khởi động lại Apache để áp dụng các thay đổi.
+            </p>
+        </li>
+    </ol>
+
+    <h3>4.2. Cài đặt Nginx</h3>
+
+    <ol>
+        <li>
+            Chạy các lệnh sau:
+            <div class="command">
+                <pre><code id="command9">sudo apt install nginx php-fpm -y
+sudo systemctl restart nginx
+sudo systemctl restart php8.1-fpm</code></pre>
+                <button class="copy-button"
+                    onclick="copyText('command9')">Sao
+                    chép</button>
+            </div>
+            <p>
+                Lệnh <code>sudo apt install nginx php-fpm -y</code> cài đặt Nginx và PHP-FPM (FastCGI Process Manager).
+                Lệnh <code>sudo systemctl restart nginx</code> khởi động lại Nginx.
+                Lệnh <code>sudo systemctl restart php8.1-fpm</code> khởi động lại PHP-FPM.
+            </p>
+            <div class="note">
+                <p>
+                    Thay thế <code>8.1</code> trong lệnh khởi động lại PHP-FPM bằng phiên bản PHP bạn đã cài đặt.
+                </p>
+            </div>
+        </li>
+    </ol>
+
+    <h3>4.3. Tạo một tệp PHP info (Tùy chọn)</h3>
+
+    <p>
+        Để kiểm tra xem PHP có hoạt động đúng không với máy chủ web, bạn có thể tạo một tệp <code>info.php</code> đơn
+        giản.
+    </p>
+
+    <ol>
+        <li>
+            Chạy lệnh sau:
+            <div class="command">
+                <pre><code id="command10">echo "&lt;?php phpinfo(); ?&gt;" | sudo tee /var/www/html/info.php</code></pre>
+                <button class="copy-button" onclick="copyText('command10')">Sao chép</button>
+            </div>
+            <p>
+                Lệnh này tạo một tệp có tên <code>info.php</code> trong thư mục gốc của máy chủ web (thường là
+                <code>/var/www/html/</code>) và thêm mã PHP để hiển thị thông tin về cấu hình PHP.
+            </p>
+        </li>
+    </ol>
+
+    <h3>4.4. Truy cập tệp PHP info</h3>
+
+    <ol>
+        <li>
+            Mở trình duyệt web của bạn và truy cập URL sau:
+            <div class="command">
+                <pre><code id="command11">http://&lt;địa_chỉ_IP_của_máy_chủ&gt;/info.php</code></pre>
+                <button class="copy-button" onclick="copyText('command11')">Sao
+                    chép</button>
+            </div>
+            <div class="note">
+                <p>
+                    Thay thế <code>&lt;địa_chỉ_IP_của_máy_chủ&gt;</code> bằng địa chỉ IP hoặc tên miền của máy chủ của
+                    bạn.
+                </p>
+            </div>
+        </li>
+        <li>
+            Nếu PHP được cài đặt và định cấu hình đúng cách, bạn sẽ thấy một trang web hiển thị thông tin chi tiết về
+            cài đặt PHP của bạn.
+        </li>
+    </ol>
+
+    <script>
+        function copyText(elementId) {
+        const text = document.getElementById(elementId).textContent.trim();
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // Tạo một thông báo
+        const message = document.createElement('div');
+        message.textContent = 'Đã sao chép vào clipboard!';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = '#4CAF50';
+        message.style.color = 'white';
+        message.style.padding = '10px 20px';
+        message.style.borderRadius = '5px';
+        message.style.zIndex = '1000'; // Đảm bảo nó ở trên cùng
+
+        document.body.appendChild(message);
+
+        // Ẩn thông báo sau 1.5 giây
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 500); // Đợi khi hiệu ứng mờ kết thúc
+        }, 1500);
+    }
+    </script>
+</body>
+
+</html>

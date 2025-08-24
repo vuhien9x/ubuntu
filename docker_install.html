@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng dẫn cài đặt Docker trên Ubuntu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 2em auto;
+            max-width: 800px;
+            padding: 0 1em;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 0.5em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 1em;
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: 0.5em;
+            overflow-x: auto;
+            border: 1px solid #ccc;
+        }
+
+        code {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        ol {
+            margin-bottom: 1em;
+        }
+
+        .important {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .note {
+            color: #1976d2;
+            font-style: italic;
+        }
+
+        .command {
+            background-color: #e0f7fa;
+            border-left: 5px solid #4dd0e1;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .output {
+            background-color: #fbe9e7;
+            border-left: 5px solid #ffab91;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.25em 0.5em;
+            border: none;
+            cursor: pointer;
+            float: right;
+            border-radius: 5px;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Hướng dẫn cài đặt Docker trên Ubuntu</h1>
+
+    <p>
+        Hướng dẫn này sẽ giúp bạn cài đặt Docker trên hệ thống Ubuntu của bạn.
+    </p>
+
+    <h2>Chuẩn bị trước</h2>
+
+    <p>
+        Trước khi bắt đầu, hãy đảm bảo bạn đã chuẩn bị sẵn sàng:
+    </p>
+
+    <ul>
+        <li>
+            <b>Máy ảo Ubuntu:</b> Hướng dẫn này giả định rằng bạn đã cài đặt Ubuntu (phiên bản 20.04 LTS hoặc 22.04 LTS) trên VMware Workstation. Nếu chưa, hãy:
+            <ul>
+                <li>Tải file ISO Ubuntu từ trang chính thức. [cite: 2]</li>
+                <li>Tạo máy ảo mới trong VMware Workstation, chọn file ISO, và làm theo hướng dẫn cài đặt Ubuntu. [cite: 3]</li>
+            </ul>
+        </li>
+        <li>
+            <b>Kết nối mạng:</b> Đảm bảo máy ảo Ubuntu của bạn có kết nối Internet để tải các gói cài đặt Docker. [cite: 4]
+        </li>
+        <li>
+            <b>Quyền truy cập Terminal:</b> Bạn cần mở Terminal trong Ubuntu để chạy các lệnh. [cite: 5, 6]
+        </li>
+    </ul>
+
+    <h2>Các bước cài đặt Docker trên Ubuntu</h2>
+
+    <h3>Bước 1: Cập nhật hệ thống Ubuntu</h3>
+
+    <ol>
+        <li>
+            Mở Terminal trong Ubuntu (Ctrl + Alt + T). [cite: 6, 7]
+        </li>
+        <li>
+            Cập nhật danh sách các gói phần mềm:
+            <div class="command">
+                <pre><code id="update-apt">sudo apt update</code></pre>
+                <button class="copy-button" onclick="copyText('update-apt')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Nâng cấp các gói hiện có lên phiên bản mới nhất:
+            <div class="command">
+                <pre><code id="upgrade-apt">sudo apt upgrade -y</code></pre>
+                <button class="copy-button" onclick="copyText('upgrade-apt')">Sao chép</button>
+            </div>
+            <p>
+                (Tùy chọn `-y` tự động đồng ý với các thay đổi.) [cite: 7]
+            </p>
+        </li>
+    </ol>
+
+    <h3>Bước 2: Cài đặt các gói cần thiết</h3>
+
+    <p>
+        Cài đặt một số công cụ hỗ trợ để thêm repository của Docker:
+    </p>
+    <div class="command">
+        <pre><code id="install-prerequisites">sudo apt install -y apt-transport-https ca-certificates curl software-properties-common</code></pre>
+        <button class="copy-button" onclick="copyText('install-prerequisites')">Sao chép</button>
+    </div>
+
+    <h3>Bước 3: Thêm khóa GPG và repository của Docker</h3>
+
+    <ol>
+        <li>
+            Thêm khóa GPG chính thức của Docker để xác thực:
+            <div class="command">
+                <pre><code id="add-gpg-key">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg</code></pre>
+                <button class="copy-button" onclick="copyText('add-gpg-key')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Thêm repository Docker vào hệ thống:
+            <div class="command">
+                <pre><code id="add-docker-repo">echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null</code></pre>
+                <button class="copy-button" onclick="copyText('add-docker-repo')">Sao chép</button>
+            </div>
+        </li>
+    </ol>
+
+    <h3>Bước 4: Cài đặt Docker</h3>
+
+    <ol>
+        <li>
+            Cập nhật lại danh sách gói sau khi thêm repository:
+            <div class="command">
+                <pre><code id="update-apt-after-repo">sudo apt update</code></pre>
+                <button class="copy-button" onclick="copyText('update-apt-after-repo')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Cài đặt Docker Engine:
+            <div class="command">
+                <pre><code id="install-docker">sudo apt install -y docker-ce docker-ce-cli containerd.io</code></pre>
+                <button class="copy-button" onclick="copyText('install-docker')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    `docker-ce`: Phiên bản cộng đồng của Docker. [cite: 10, 11]
+                </li>
+                <li>
+                    `containerd.io`: Công cụ quản lý container. [cite: 11]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3>Bước 5: Kiểm tra cài đặt Docker</h3>
+
+    <ol>
+        <li>
+            Kiểm tra trạng thái của Docker:
+            <div class="command">
+                <pre><code id="check-docker-status">sudo systemctl status docker</code></pre>
+                <button class="copy-button" onclick="copyText('check-docker-status')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Nếu Docker đang chạy, bạn sẽ thấy trạng thái `active (running)`. [cite: 11]
+                </li>
+                <li>
+                    Nhấn `Ctrl + C` để thoát. [cite: 12]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Chạy thử một container mẫu:
+            <div class="command">
+                <pre><code id="run-hello-world">sudo docker run hello-world</code></pre>
+                <button class="copy-button" onclick="copyText('run-hello-world')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Lệnh này tải một image thử nghiệm và in thông điệp "Hello from Docker!" nếu thành công. [cite: 12, 13]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3>Bước 6: Cho phép người dùng không phải root chạy Docker (Tùy chọn)</h3>
+
+    <p>
+        Theo mặc định, chỉ người dùng root hoặc người dùng có quyền sudo mới có thể chạy Docker. [cite: 13, 14] Để tiện hơn, bạn có thể cấu hình để người dùng hiện tại có thể chạy Docker mà không cần sudo. [cite: 14]
+    </p>
+
+    <ol>
+        <li>
+            Thêm người dùng hiện tại vào nhóm `docker`:
+            <div class="command">
+                <pre><code id="add-user-to-docker-group">sudo usermod -aG docker $USER</code></pre>
+                <button class="copy-button" onclick="copyText('add-user-to-docker-group')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Đăng xuất và đăng nhập lại Ubuntu (hoặc khởi động lại máy ảo). [cite: 14]
+        </li>
+        <li>
+            Kiểm tra bằng cách chạy lại lệnh `docker run hello-world` mà không cần `sudo`:
+            <div class="command">
+                <pre><code id="run-hello-world-no-sudo">docker run hello-world</code></pre>
+                <button class="copy-button" onclick="copyText('run-hello-world-no-sudo')">Sao chép</button>
+            </div>
+        </li>
+    </ol>
+
+    <h3>Bước 7: (Tùy chọn) Cài đặt Docker Compose</h3>
+
+    <p>
+        Nếu bạn cần Docker Compose để quản lý nhiều container, hãy làm theo các bước sau: [cite: 15]
+    </p>
+
+    <ol>
+        <li>
+            Tải phiên bản mới nhất của Docker Compose:
+            <div class="command">
+                <pre><code id="download-docker-compose">sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose</code></pre>
+                <button class="copy-button" onclick="copyText('download-docker-compose')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Phân quyền thực thi cho Docker Compose:
+            <div class="command">
+                <pre><code id="make-docker-compose-executable">sudo chmod +x /usr/local/bin/docker-compose</code></pre>
+                <button class="copy-button" onclick="copyText('make-docker-compose-executable')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Kiểm tra phiên bản của Docker Compose:
+            <div class="command">
+                <pre><code id="check-docker-compose-version">docker-compose --version</code></pre>
+                <button class="copy-button" onclick="copyText('check-docker-compose-version')">Sao chép</button>
+            </div>
+        </li>
+    </ol>
+
+    <h2>Kết quả</h2>
+
+    <p>
+        Nếu mọi thứ diễn ra suôn sẻ, bạn đã cài đặt thành công Docker trên máy ảo Ubuntu của mình! [cite: 15, 16]
+    </p>
+
+    <p>
+        Bạn có thể bắt đầu sử dụng Docker để chạy các container. Ví dụ:
+    </p>
+
+    <ul>
+        <li>
+            Tải image Ubuntu:
+            <div class="command">
+                <pre><code id="docker-pull-ubuntu">docker pull ubuntu</code></pre>
+                <button class="copy-button" onclick="copyText('docker-pull-ubuntu')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Chạy một container Ubuntu và mở shell bên trong:
+            <div class="command">
+                <pre><code id="docker-run-ubuntu">docker run -it ubuntu bash</code></pre>
+                <button class="copy-button" onclick="copyText('docker-run-ubuntu')">Sao chép</button>
+            </div>
+            (Lệnh này tải image Ubuntu và mở một shell bên trong container.) [cite: 16]
+        </li>
+    </ul>
+
+    <h2>Nếu gặp vấn đề</h2>
+
+    <ul>
+        <li>
+            <b>Lỗi kết nối mạng:</b> Kiểm tra cấu hình mạng trong VMware (NAT hoặc Bridged). [cite: 17, 18]
+        </li>
+        <li>
+            <b>Lỗi cài đặt:</b> Gửi thông báo lỗi cụ thể để được hỗ trợ. [cite: 18, 19]
+        </li>
+        <li>
+            <b>Docker không khởi động:</b> Chạy `sudo systemctl start docker` để bật dịch vụ. [cite: 19]
+        </li>
+    </ul>
+
+    <script>
+        function copyText(elementId) {
+        const text = document.getElementById(elementId).textContent.trim();
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // Tạo một thông báo
+        const message = document.createElement('div');
+        message.textContent = 'Đã sao chép vào clipboard!';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = '#4CAF50';
+        message.style.color = 'white';
+        message.style.padding = '10px 20px';
+        message.style.borderRadius = '5px';
+        message.style.zIndex = '1000'; // Đảm bảo nó ở trên cùng
+
+        document.body.appendChild(message);
+
+        // Ẩn thông báo sau 1.5 giây
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 500); // Đợi khi hiệu ứng mờ kết thúc
+        }, 1500);
+    }
+    </script>
+</body>
+
+</html>

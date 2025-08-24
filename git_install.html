@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng dẫn cài đặt Git trên Ubuntu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 2em auto;
+            max-width: 800px;
+            padding: 0 1em;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 0.5em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 1em;
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: 0.5em;
+            overflow-x: auto;
+            border: 1px solid #ccc;
+        }
+
+        code {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        ol {
+            margin-bottom: 1em;
+        }
+
+        .important {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .note {
+            color: #1976d2;
+            font-style: italic;
+        }
+
+        .command {
+            background-color: #e0f7fa;
+            border-left: 5px solid #4dd0e1;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .output {
+            background-color: #fbe9e7;
+            border-left: 5px solid #ffab91;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.25em 0.5em;
+            border: none;
+            cursor: pointer;
+            float: right;
+            border-radius: 5px;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Hướng dẫn cài đặt Git trên Ubuntu</h1>
+
+    <p>
+        Hướng dẫn này sẽ giúp bạn cài đặt Git, một hệ thống quản lý phiên bản phân tán, trên hệ thống Ubuntu của bạn.
+    </p>
+
+    <h2>Bước 1: Mở Terminal</h2>
+
+    <p>
+        Để bắt đầu, bạn cần mở Terminal.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Mở Terminal trong Ubuntu bằng cách nhấn tổ hợp phím <code>Ctrl + Alt + T</code>. [cite: 1]
+        </li>
+    </ol>
+
+    <h2>Bước 2: Cập nhật danh sách gói phần mềm</h2>
+
+    <p>
+        Trước khi cài đặt Git, bạn nên cập nhật danh sách các gói phần mềm để đảm bảo rằng bạn cài đặt phiên bản Git mới
+        nhất có sẵn.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Chạy lệnh sau trong Terminal:
+            <div class="command">
+                <pre><code id="update-apt">sudo apt update</code></pre>
+                <button class="copy-button" onclick="copyText('update-apt')">Sao chép</button>
+            </div>
+        </li>
+    </ol>
+
+    <h2>Bước 3: Cài đặt Git</h2>
+
+    <p>
+        Bây giờ, bạn có thể cài đặt Git.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Chạy lệnh sau trong Terminal:
+            <div class="command">
+                <pre><code id="install-git">sudo apt install git -y</code></pre>
+                <button class="copy-button" onclick="copyText('install-git')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Tùy chọn <code>-y</code> tự động đồng ý với quá trình cài đặt, giúp bạn tiết kiệm thời gian. [cite:
+                    2]
+                </li>
+                <li>
+                    Đợi vài giây để quá trình cài đặt hoàn tất. Git sẽ được tải xuống từ kho phần mềm mặc định của
+                    Ubuntu. [cite: 3]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Bước 4: Kiểm tra cài đặt</h2>
+
+    <p>
+        Sau khi cài đặt xong, bạn nên kiểm tra để đảm bảo rằng Git đã được cài đặt thành công.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Chạy lệnh sau trong Terminal:
+            <div class="command">
+                <pre><code id="check-git-version">git --version</code></pre>
+                <button class="copy-button" onclick="copyText('check-git-version')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Bạn sẽ thấy kết quả tương tự như sau (phiên bản có thể khác):
+            <div class="output">
+                <pre><code>git version 2.34.1</code></pre>
+            </div>
+            <p>
+                Điều này có nghĩa là Git đã được cài đặt thành công. [cite: 4]
+            </p>
+        </li>
+    </ol>
+
+    <h2>Bước 5: Cấu hình Git (Thông tin cơ bản)</h2>
+
+    <p>
+        Trước khi bắt đầu sử dụng Git, bạn nên thiết lập thông tin cá nhân của mình. Git sử dụng thông tin này để gắn
+        tên và email của bạn vào các commit (lưu thay đổi).
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Thiết lập tên người dùng:
+            <div class="command">
+                <pre><code id="set-username">git config --global user.name "Tên của bạn"</code></pre>
+                <button class="copy-button" onclick="copyText('set-username')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Thay <code>"Tên của bạn"</code> bằng tên thật hoặc biệt danh mà bạn muốn sử dụng. Ví dụ:
+                    <div class="command">
+                        <pre><code>git config --global user.name "Nguyen Van A"</code></pre>
+                    </div>
+                    [cite: 5]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Thiết lập địa chỉ email:
+            <div class="command">
+                <pre><code id="set-email">git config --global user.email "email@example.com"</code></pre>
+                <button class="copy-button" onclick="copyText('set-email')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Thay <code>"email@example.com"</code> bằng địa chỉ email của bạn. Ví dụ:
+                    <div class="command">
+                        <pre><code>git config --global user.email "nguyen@example.com"</code></pre>
+                    </div>
+                    [cite: 6]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Kiểm tra cấu hình:
+            <div class="command">
+                <pre><code id="check-config">git config --list</code></pre>
+                <button class="copy-button" onclick="copyText('check-config')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Lệnh này sẽ hiển thị danh sách tất cả các thiết lập cấu hình của Git. Bạn sẽ thấy thông tin tên
+                    người dùng và email mà bạn vừa nhập. Ví dụ:
+                    <div class="output">
+                        <pre><code>user.name=Tên của bạn
+user.email=email@example.com</code></pre>
+                    </div>
+                    [cite: 7]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Bước 6: (Tùy chọn) Kiểm tra Git hoạt động</h2>
+
+    <p>
+        Để đảm bảo rằng Git hoạt động chính xác, bạn có thể tạo một thư mục thử nghiệm và thực hiện một số thao tác Git
+        cơ bản.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Tạo một thư mục thử nghiệm:
+            <div class="command">
+                <pre><code id="create-test-dir">mkdir git-test</code></pre>
+                <button class="copy-button" onclick="copyText('create-test-dir')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Chuyển đến thư mục thử nghiệm:
+            <div class="command">
+                <pre><code id="change-to-test-dir">cd git-test</code></pre>
+                <button class="copy-button" onclick="copyText('change-to-test-dir')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Khởi tạo một repository Git (kho chứa mã nguồn) trong thư mục này:
+            <div class="command">
+                <pre><code id="init-git-repo">git init</code></pre>
+                <button class="copy-button" onclick="copyText('init-git-repo')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Bạn sẽ thấy một thông báo tương tự như:
+                    <div class="output">
+                        <pre><code>Initialized empty Git repository in /home/user/git-test/.git/</code></pre>
+                    </div>
+                    [cite: 7]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Tạo một file thử:
+            <div class="command">
+                <pre><code id="create-test-file">echo "Hello Git" > test.txt</code></pre>
+                <button class="copy-button" onclick="copyText('create-test-file')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Thêm file thử vào repository Git:
+            <div class="command">
+                <pre><code id="add-test-file">git add test.txt</code></pre>
+                <button class="copy-button" onclick="copyText('add-test-file')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Lưu thay đổi (commit) với một thông báo:
+            <div class="command">
+                <pre><code id="commit-test-file">git commit -m "First commit"</code></pre>
+                <button class="copy-button" onclick="copyText('commit-test-file')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Nếu không có lỗi xảy ra, điều đó có nghĩa là Git đã hoạt động hoàn hảo! [cite: 8]
+        </li>
+    </ol>
+
+    <h2>Bước 7: (Tùy chọn) Cài đặt các công cụ bổ sung</h2>
+
+    <p>
+        Git đi kèm với một số công cụ bổ sung có thể giúp bạn làm việc hiệu quả hơn.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Nếu bạn muốn sử dụng giao diện đồ họa (GUI) cho Git, bạn có thể cài đặt Git GUI:
+            <div class="command">
+                <pre><code id="install-git-gui">sudo apt install git-gui -y</code></pre>
+                <button class="copy-button" onclick="copyText('install-git-gui')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Bạn có thể chạy Git GUI bằng lệnh:
+                    <div class="command">
+                        <pre><code>git gui</code></pre>
+                    </div>
+                    [cite: 9]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Nếu bạn muốn cài đặt Gitk, một công cụ để xem lịch sử commit một cách trực quan, bạn có thể chạy lệnh sau:
+            <div class="command">
+                <pre><code id="install-gitk">sudo apt install gitk -y</code></pre>
+                <button class="copy-button" onclick="copyText('install-gitk')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Bạn có thể chạy Gitk bằng lệnh:
+                    <div class="command">
+                        <pre><code>gitk</code></pre>
+                    </div>
+                    [cite: 9]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Kết quả</h2>
+
+    <p>
+        Chúc mừng! Bạn đã cài đặt thành công Git trên Ubuntu. [cite: 9, 10]
+    </p>
+
+    <p>
+        Bây giờ bạn có thể sử dụng Git để:
+    </p>
+
+    <ul>
+        <li>
+            Clone (sao chép) các repository (kho chứa mã nguồn) từ các nền tảng như GitHub hoặc GitLab. [cite: 10, 11]
+            Ví dụ:
+            <div class="command">
+                <pre><code>git clone https://github.com/username/repository.git</code></pre>
+            </div>
+        </li>
+        <li>
+            Tạo các dự án mới và quản lý mã nguồn của chúng. [cite: 10]
+        </li>
+        <li>
+            Và nhiều tác vụ quản lý phiên bản khác.
+        </li>
+    </ul>
+
+    <h2>Nếu bạn gặp vấn đề</h2>
+
+    <ul>
+        <li>
+            <b>Lỗi cài đặt:</b>
+            <ul>
+                <li>
+                    Chạy lại lệnh <code>sudo apt update</code> để đảm bảo danh sách gói phần mềm được cập nhật. [cite:
+                    11]
+                </li>
+                <li>
+                    Kiểm tra kết nối mạng của bạn. [cite: 11]
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Không tìm thấy lệnh `git`:</b>
+            <ul>
+                <li>
+                    Đảm bảo rằng quá trình cài đặt đã hoàn tất bằng cách chạy lại lệnh
+                    <code>sudo apt install git</code>. [cite: 12]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Nếu bạn gặp bất kỳ lỗi nào khác, vui lòng cung cấp thông tin chi tiết về lỗi đó để được hỗ trợ. [cite: 13]
+        </li>
+    </ul>
+
+    <script>
+        function copyText(elementId) {
+        const text = document.getElementById(elementId).textContent.trim();
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // Tạo một thông báo
+        const message = document.createElement('div');
+        message.textContent = 'Đã sao chép vào clipboard!';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = '#4CAF50';
+        message.style.color = 'white';
+        message.style.padding = '10px 20px';
+        message.style.borderRadius = '5px';
+        message.style.zIndex = '1000'; // Đảm bảo nó ở trên cùng
+
+        document.body.appendChild(message);
+
+        // Ẩn thông báo sau 1.5 giây
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 500); // Đợi khi hiệu ứng mờ kết thúc
+        }, 1500);
+    }
+    </script>
+</body>
+
+</html>

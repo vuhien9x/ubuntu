@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa lỗi DNS nội bộ của Docker</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      margin: 2em auto;
+      max-width: 800px;
+      padding: 0 1em;
+      color: #333;
+      background-color: #f8f8f8;
+    }
+
+    h1 {
+      color: #444;
+      text-align: center;
+    }
+
+    h2 {
+      color: #555;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5em;
+      margin-top: 1.5em;
+    }
+
+    h3 {
+      color: #666;
+      margin-top: 1em;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 0.5em;
+      overflow-x: auto;
+      border: 1px solid #ccc;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    ol {
+      margin-bottom: 1em;
+    }
+
+    .important {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+
+    .note {
+      color: #1976d2;
+      font-style: italic;
+    }
+
+    .command {
+      background-color: #e0f7fa;
+      border-left: 5px solid #4dd0e1;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .output {
+      background-color: #fbe9e7;
+      border-left: 5px solid #ffab91;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .copy-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.25em 0.5em;
+      border: none;
+      cursor: pointer;
+      float: right;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sửa lỗi DNS nội bộ của Docker</h1>
+
+  <p class="note">
+    Nguyên nhân: Laravel không thể phân giải tên host "mysql" trong Docker network. [cite: 1]
+  </p>
+
+  <h2>Bước 1: Kiểm tra trạng thái container</h2>
+
+  <ol>
+    <li>
+      Chạy lệnh để xem các container đang chạy:
+      <div class="command">
+        <pre><code id="docker-ps">docker ps</code></pre>
+        <button class="copy-button" onclick="copyText('docker-ps')">Sao chép</button>
+      </div>
+      <ul>
+        <li>
+          Đảm bảo cả "ems-laravel.test-1" và "ems-mysql-1" đều có trạng thái "Up". [cite: 1]
+        </li>
+      </ul>
+    </li>
+    <li>
+      Nếu "ems-mysql-1" không chạy, xem log:
+      <div class="command">
+        <pre><code id="docker-logs">docker logs ems-mysql-1</code></pre>
+        <button class="copy-button" onclick="copyText('docker-logs')">Sao chép</button>
+      </div>
+      Khởi động lại nếu cần:
+      <div class="command">
+        <pre><code id="docker-compose-up">docker-compose up -d</code></pre>
+        <button class="copy-button" onclick="copyText('docker-compose-up')">Sao chép</button>
+      </div> [cite: 2]
+    </li>
+  </ol>
+
+  <h2>Bước 2: Kiểm tra kết nối mạng</h2>
+
+  <ol>
+    <li>
+      Vì image "sail-8.4/app" không có "ping", dùng "telnet" để kiểm tra: [cite: 2]
+      <ul>
+        <li>
+          Cài telnet trong container:
+          <div class="command">
+            <pre><code id="docker-exec-install-telnet">docker exec -it ems-laravel.test-1 sh -c "apt-get update && apt-get install -y telnet"</code></pre>
+            <button class="copy-button" onclick="copyText('docker-exec-install-telnet')">Sao chép</button>
+          </div>
+        </li>
+        <li>
+          Kiểm tra kết nối tới MySQL:
+          <div class="command">
+            <pre><code id="docker-exec-telnet">docker exec -it ems-laravel.test-1 telnet mysql 3306</code></pre>
+            <button class="copy-button" onclick="copyText('docker-exec-telnet')">Sao chép</button>
+          </div>
+        </li>
+        <li>
+          Kết quả:
+          <ul>
+            <li>Nếu thấy "Connected to mysql": Kết nối thành công. [cite: 3]</li>
+            <li>Nếu lỗi "Name or service not known": Mạng có vấn đề. [cite: 4]</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      (Tùy chọn) Xác định IP của container "mysql" để kiểm tra thủ công:
+      <div class="command">
+        <pre><code id="docker-inspect-ip">docker inspect ems-mysql-1 | grep IPAddress</code></pre>
+        <button class="copy-button" onclick="copyText('docker-inspect-ip')">Sao chép</button>
+      </div>
+      Ghi lại IP (ví dụ: 172.18.0.2). [cite: 5, 6]
+    </li>
+  </ol>
+
+  <h2>Bước 3: Thử dùng IP thay tên host (tạm thời)</h2>
+
+  <ol>
+    <li>
+      Sửa file ".env":
+      <ul>
+        <li>Tìm dòng: DB_HOST=mysql</li>
+        <li>Thay bằng: DB_HOST=172.x.x.x (dùng IP từ bước 2)</li>
+      </ul> [cite: 7]
+    </li>
+    <li>
+      Chạy lại migration:
+      <div class="command">
+        <pre><code id="docker-exec-migrate">docker exec -it ems-laravel.test-1 php artisan migrate</code></pre>
+        <button class="copy-button" onclick="copyText('docker-exec-migrate')">Sao chép</button>
+      </div>
+      <ul>
+        <li>Nếu thành công: Vấn đề là DNS.
+          Tiếp tục bước 4. [cite: 7, 8]
+        </li>
+        <li>Nếu vẫn lỗi: Kiểm tra log và thông tin thêm. [cite: 8]</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>Bước 4: Khắc phục DNS</h2>
+
+  <h3>Cách 1: Tạo lại mạng "sail"</h3>
+
+  <ol>
+    <li>
+      Dừng và xóa mạng:
+      <div class="command">
+        <pre><code id="docker-compose-down">docker-compose down</code></pre>
+        <button class="copy-button" onclick="copyText('docker-compose-down')">Sao chép</button>
+      </div>
+      <div class="command">
+        <pre><code id="docker-network-rm">docker network rm ems_sail</code></pre>
+        <button class="copy-button" onclick="copyText('docker-network-rm')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Khởi động lại:
+      <div class="command">
+        <pre><code id="docker-compose-up-build">docker-compose up --build -d</code></pre>
+        <button class="copy-button" onclick="copyText('docker-compose-up-build')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Chạy migration:
+      <div class="command">
+        <pre><code id="docker-exec-migrate-2">docker exec -it ems-laravel.test-1 php artisan migrate</code></pre>
+        <button class="copy-button" onclick="copyText('docker-exec-migrate-2')">Sao chép</button>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Cách 2: Thêm DNS thủ công</h3>
+
+  <ol>
+    <li>
+      Sửa file "docker-compose.yml", thêm vào "laravel.test":
+      <pre><code>
+services:
+  laravel.test:
+    # ... các cấu hình khác ...
+    dns:
+      - 8.8.8.8  # DNS của Google [cite: 9, 10]
+      - 8.8.4.4
+            </code></pre>
+    </li>
+    <li>
+      Khởi động lại:
+      <div class="command">
+        <pre><code id="docker-compose-down-2">docker-compose down</code></pre>
+        <button class="copy-button" onclick="copyText('docker-compose-down-2')">Sao chép</button>
+      </div>
+      <div class="command">
+        <pre><code id="docker-compose-up-build-2">docker-compose up --build -d</code></pre>
+        <button class="copy-button" onclick="copyText('docker-compose-up-build-2')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Chạy migration:
+      <div class="command">
+        <pre><code id="docker-exec-migrate-3">docker exec -it ems-laravel.test-1 php artisan migrate</code></pre>
+        <button class="copy-button" onclick="copyText('docker-exec-migrate-3')">Sao chép</button>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Cách 3: Đảm bảo thứ tự khởi động</h3>
+
+  <ol>
+    <li>
+      Dừng container Laravel:
+      <div class="command">
+        <pre><code id="docker-stop">docker stop ems-laravel.test-1</code></pre>
+        <button class="copy-button" onclick="copyText('docker-stop')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Chờ 10-15 giây, rồi khởi động lại:
+      <div class="command">
+        <pre><code id="docker-start">docker start ems-laravel.test-1</code></pre>
+        <button class="copy-button" onclick="copyText('docker-start')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Chạy migration:
+      <div class="command">
+        <pre><code id="docker-exec-migrate-4">docker exec -it ems-laravel.test-1 php artisan migrate</code></pre>
+        <button class="copy-button" onclick="copyText('docker-exec-migrate-4')">Sao chép</button>
+      </div>
+    </li>
+  </ol>
+
+  <h2>Bước 5: Kiểm tra kết quả</h2>
+
+  <ol>
+    <li>
+      Sau khi thử một trong các cách trên, truy cập ứng dụng:
+      <div class="command">
+        <pre><code id="access-app">http://localhost:8000</code></pre>
+        <button class="copy-button" onclick="copyText('access-app')">Sao chép</button>
+      </div> [cite: 10]
+    </li>
+    <li>
+      Nếu vẫn lỗi, thu thập thông tin: [cite: 11]
+      <ul>
+        <li>
+          Kết quả:
+          <div class="command">
+            <pre><code id="docker-inspect-ip-2">docker inspect ems-mysql-1 | grep IPAddress</code></pre>
+            <button class="copy-button" onclick="copyText('docker-inspect-ip-2')">Sao chép</button>
+          </div> [cite: 11, 12]
+        </li>
+        <li>
+          Kết quả:
+          <div class="command">
+            <pre><code id="docker-exec-telnet-2">docker exec -it ems-laravel.test-1 telnet mysql 3306</code></pre>
+            <button class="copy-button" onclick="copyText('docker-exec-telnet-2')">Sao chép</button>
+          </div> [cite: 12]
+        </li>
+        <li>
+          Log:
+          <div class="command">
+            <pre><code id="docker-logs-2">docker logs ems-laravel.test-1</code></pre>
+            <button class="copy-button" onclick="copyText('docker-logs-2')">Sao chép</button>
+          </div> [cite: 12]
+        </li>
+        <li>
+          Gửi lại để được hỗ trợ tiếp. [cite: 13]
+        </li>
+      </ul>
+    </li>
+  </ol>
+
+  <p>
+    --- HOÀN TẤT ---
+  </p>
+
+  <script>
+    function copyText(elementId) {
+        const text = document.getElementById(elementId).textContent.trim();
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // Tạo một thông báo
+        const message = document.createElement('div');
+        message.textContent = 'Đã sao chép vào clipboard!';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = '#4CAF50';
+        message.style.color = 'white';
+        message.style.padding = '10px 20px';
+        message.style.borderRadius = '5px';
+        message.style.zIndex = '1000'; // Đảm bảo nó ở trên cùng
+
+        document.body.appendChild(message);
+
+        // Ẩn thông báo sau 1.5 giây
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 500); // Đợi khi hiệu ứng mờ kết thúc
+        }, 1500);
+    }
+  </script>
+</body>
+
+</html>

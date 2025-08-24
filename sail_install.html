@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cài đặt và Rút gọn lệnh Laravel Sail</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      margin: 2em auto;
+      max-width: 800px;
+      padding: 0 1em;
+      color: #333;
+      background-color: #f8f8f8;
+    }
+
+    h1 {
+      color: #444;
+      text-align: center;
+    }
+
+    h2 {
+      color: #555;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5em;
+      margin-top: 1.5em;
+    }
+
+    h3 {
+      color: #666;
+      margin-top: 1em;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 0.5em;
+      overflow-x: auto;
+      border: 1px solid #ccc;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    ol {
+      margin-bottom: 1em;
+    }
+
+    .important {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+
+    .note {
+      color: #1976d2;
+      font-style: italic;
+    }
+
+    .command {
+      background-color: #e0f7fa;
+      border-left: 5px solid #4dd0e1;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .output {
+      background-color: #fbe9e7;
+      border-left: 5px solid #ffab91;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .copy-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.25em 0.5em;
+      border: none;
+      cursor: pointer;
+      float: right;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
+    .copied {
+      background-color: #008CBA;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Cài đặt Laravel Sail và Rút gọn lệnh</h1>
+
+  <p>
+    Hướng dẫn cài đặt Laravel Sail và cách rút gọn lệnh <code>./vendor/bin/sail</code> cho tiện sử dụng.
+  </p>
+
+  <h2>1. Cài đặt Laravel Sail</h2>
+
+  <p>
+    Để cài đặt Laravel Sail, bạn có thể sử dụng Composer.
+  </p>
+
+  <div class="command">
+    <pre><code id="install-sail">composer require laravel/sail --dev</code></pre>
+    <button class="copy-button" onclick="copyText('composer require laravel/sail --dev', this)">Sao chép</button>
+  </div>
+
+  <h2>2. Khởi tạo Sail</h2>
+
+  <p>
+    Sau khi cài đặt, bạn cần khởi tạo Sail bằng lệnh Artisan.
+  </p>
+
+  <div class="command">
+    <pre><code id="init-sail">php artisan sail:install</code></pre>
+    <button class="copy-button" onclick="copyText('php artisan sail:install', this)">Sao chép</button>
+  </div>
+
+  <h2>Hướng dẫn rút gọn lệnh Sail</h2>
+
+  <p>
+    Để thuận tiện hơn khi sử dụng, bạn có thể rút gọn lệnh <code>./vendor/bin/sail</code> thành <code>sail</code>.
+  </p>
+
+  <h3>1. Xác định shell đang sử dụng</h3>
+
+  <p>
+    Trước tiên, bạn cần biết mình đang dùng shell nào (Bash hoặc Zsh).
+  </p>
+
+  <div class="command">
+    <pre><code id="check-shell">echo $SHELL</code></pre>
+    <button class="copy-button" onclick="copyText('echo $SHELL', this)">Sao chép</button>
+  </div>
+
+  <ul>
+    <li>
+      Nếu kết quả là <code>/bin/bash</code>, bạn đang dùng Bash.
+    </li>
+    <li>
+      Nếu kết quả là <code>/bin/zsh</code>, bạn đang dùng Zsh (thường là trên macOS).
+    </li>
+  </ul>
+
+  <h3>2. Thêm alias vào file cấu hình shell</h3>
+
+  <p>
+    Tiếp theo, bạn sẽ thêm một alias vào file cấu hình của shell.
+  </p>
+
+  <ul>
+    <li>
+      Với Bash, file cấu hình thường là <code>~/.bashrc</code> hoặc <code>~/.bash_profile</code>.
+    </li>
+    <li>
+      Với Zsh, file cấu hình là <code>~/.zshrc</code>.
+    </li>
+  </ul>
+
+  <p>
+    Bạn có thể mở file này bằng trình soạn thảo nano.
+  </p>
+
+  <div class="command">
+    <pre><code id="open-bashrc">nano ~/.bashrc</code></pre>
+    <button class="copy-button" onclick="copyText('nano ~/.bashrc', this)">Sao chép</button>
+  </div>
+
+  <p>
+    (Hoặc <code>~/.bash_profile</code>, <code>~/.zshrc</code> tùy vào shell bạn đang dùng).
+  </p>
+
+  <h3>3. Thêm alias</h3>
+
+  <p>
+    Thêm một trong các dòng sau vào cuối file cấu hình. Khuyến nghị nên dùng `alias` hoặc `$PATH`.
+  </p>
+
+  <div class="command">
+    <pre><code id="alias-sail">alias sail=&#39;.&#47;vendor&#47;bin&#47;sail&#39;</code></pre>
+    <button class="copy-button" onclick="copyText('alias sail=&#39;.&#47;vendor&#47;bin&#47;sail&#39;', this)">Sao
+      chép</button>
+  </div>
+
+  <p>
+    Hoặc
+  </p>
+
+  <div class="command">
+    <pre><code id="export-path">export PATH="$PATH:./vendor/bin"</code></pre>
+    <button class="copy-button" onclick="copyText('export PATH=&quot;$PATH:./vendor/bin&quot;', this)">Sao chép</button>
+  </div>
+
+  <p>
+    Hoặc
+  </p>
+  <div class="command">
+    <pre><code id="function-sail">function sail { .&#92;vendor&#92;bin&#92;sail $args }</code></pre>
+    <button class="copy-button" onclick="copyText('function sail { .&#92;vendor&#92;bin&#92;sail $args }', this)">Sao
+      chép</button>
+  </div>
+
+  <p>
+    Lưu file và thoát (Ctrl + O, Enter, Ctrl + X nếu dùng nano).
+  </p>
+
+  <h3>4. Áp dụng thay đổi</h3>
+
+  <p>
+    Để các thay đổi có hiệu lực, bạn cần tải lại file cấu hình shell.
+  </p>
+
+  <div class="command">
+    <pre><code id="source-bashrc">source ~/.bashrc</code></pre>
+    <button class="copy-button" onclick="copyText('source ~/.bashrc', this)">Sao chép</button>
+  </div>
+
+  <p>
+    (Hoặc <code>~/.bash_profile</code>, <code>~/.zshrc</code> tương ứng).
+  </p>
+
+  <h3>5. Kiểm tra</h3>
+
+  <p>
+    Bây giờ bạn có thể dùng `sail` thay cho `./vendor/bin/sail`.
+  </p>
+
+  <p>
+    Ví dụ:
+  </p>
+
+  <div class="command">
+    <pre><code id="sail-up">sail up</code></pre>
+    <button class="copy-button" onclick="copyText('sail up', this)">Sao chép</button>
+  </div>
+
+  <div class="command">
+    <pre><code id="sail-artisan-migrate">sail artisan migrate</code></pre>
+    <button class="copy-button" onclick="copyText('sail artisan migrate', this)">Sao chép</button>
+  </div>
+
+  <p class="note">
+    <b>Lưu ý:</b> Alias chỉ hoạt động trong thư mục dự án chứa <code>./vendor/bin/sail</code>. Nếu bạn di chuyển ra
+    ngoài thư mục dự án, lệnh <code>sail</code> sẽ không hoạt động.
+  </p>
+
+  <script>
+    function copyText(text, button) {
+      navigator.clipboard.writeText(text).then(function () {
+        button.innerText = 'Đã sao chép!';
+        button.classList.add('copied');
+        setTimeout(function () {
+          button.innerText = 'Sao chép';
+          button.classList.remove('copied');
+        }, 1500);
+      }, function (err) {
+        console.error('Không thể sao chép: ', err);
+        button.innerText = 'Lỗi!';
+      });
+    }
+  </script>
+</body>
+
+</html>

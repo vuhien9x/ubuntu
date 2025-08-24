@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa lỗi trùng Port 80 và 3306 khi dùng Docker trên Ubuntu</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      margin: 2em auto;
+      max-width: 800px;
+      padding: 0 1em;
+      color: #333;
+      background-color: #f8f8f8;
+    }
+
+    h1 {
+      color: #444;
+      text-align: center;
+    }
+
+    h2 {
+      color: #555;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5em;
+      margin-top: 1.5em;
+    }
+
+    h3 {
+      color: #666;
+      margin-top: 1em;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 0.5em;
+      overflow-x: auto;
+      border: 1px solid #ccc;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    ol {
+      margin-bottom: 1em;
+    }
+
+    .important {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+
+    .note {
+      color: #1976d2;
+      font-style: italic;
+    }
+
+    .command {
+      background-color: #e0f7fa;
+      border-left: 5px solid #4dd0e1;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .output {
+      background-color: #fbe9e7;
+      border-left: 5px solid #ffab91;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .copy-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.25em 0.5em;
+      border: none;
+      cursor: pointer;
+      float: right;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sửa lỗi trùng Port 80 và 3306 khi dùng Docker trên Ubuntu</h1>
+
+  <h2>I. Lỗi trùng Port 80 (Thường gặp với Laravel.test)</h2>
+
+  <p>
+    <b>Nguyên nhân:</b> Port 80 trên host bị chiếm dụng bởi một dịch vụ khác (Apache, Nginx, hoặc container khác).
+
+  </p>
+
+  <ol>
+    <li>
+      Kiểm tra tiến trình dùng port 80:
+      <p>
+        Lệnh:
+      </p>
+      <div class="command">
+        <pre><code id="netstat">sudo netstat -tulnp | grep :80</code></pre>
+        <button class="copy-button" onclick="copyText('netstat')">Sao chép</button>
+      </div>
+      <p>
+        hoặc
+      </p>
+      <div class="command">
+        <pre><code id="lsof">sudo lsof -i :80</code></pre>
+        <button class="copy-button" onclick="copyText('lsof')">Sao chép</button>
+      </div>
+      <ul>
+        <li>
+          Nếu thấy Apache/Nginx:
+          <p>
+            Dừng dịch vụ:
+          </p>
+          <div class="command">
+            <pre><code id="stop-apache">sudo systemctl stop apache2</code></pre>
+            <button class="copy-button" onclick="copyText('stop-apache')">Sao chép</button>
+          </div>
+          <p>
+            (Hoặc nginx)
+          </p>
+          <p>
+            Tắt khởi động cùng hệ thống (nếu không cần):
+          </p>
+          <div class="command">
+            <pre><code id="disable-apache">sudo systemctl disable apache2</code></pre>
+            <button class="copy-button" onclick="copyText('disable-apache')">Sao chép</button>
+          </div>
+          <p>
+            (Hoặc nginx)
+          </p>
+          <p>
+            Ngăn dịch vụ tự động khởi động
+          </p>
+          <div class="command">
+            <pre><code id="update-rc">sudo update-rc.d apache2 disable
+sudo update-rc.d nginx disable</code></pre>
+            <button class="copy-button" onclick="copyText('update-rc')">Sao chép</button>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Kiểm tra container Docker khác
+      <p>
+        Lệnh:
+      </p>
+      <div class="command">
+        <pre><code id="docker-ps">docker ps</code></pre>
+        <button class="copy-button" onclick="copyText('docker-ps')">Sao chép</button>
+      </div>
+      <ul>
+        <li>
+          Nếu thấy container khác dùng 0.0.0.0:80->80/tcp:
+          <p>
+            Dừng container:
+          </p>
+          <div class="command">
+            <pre><code id="docker-stop">docker stop &lt;container_id&gt;</code></pre>
+            <button class="copy-button" onclick="copyText('docker-stop')">Sao chép</button>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Thay đổi port trong Laravel Sail
+      <ul>
+        <li>
+          Mở file .env, thêm/sửa:
+          <div class="command">
+            <pre><code id="app-port">APP_PORT=8000</code></pre>
+            <button class="copy-button" onclick="copyText('app-port')">Sao chép</button>
+          </div>
+        </li>
+        <li>
+          Dừng và chạy lại Sail:
+          <div class="command">
+            <pre><code id="sail-down-up">./vendor/bin/sail down
+./vendor/bin/sail up -d</code></pre>
+            <button class="copy-button" onclick="copyText('sail-down-up')">Sao chép</button>
+          </div>
+        </li>
+        <li>
+          Truy cập: <a href="http://localhost:8000">http://localhost:8000</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Sửa trực tiếp trong docker-compose.yml (nếu cần)
+      <ul>
+        <li>
+          Mở file docker-compose.yml, tìm dịch vụ laravel.test:
+          <pre><code>
+ports:
+  - "8000:80"  # Thay 80:80 thành 8000:80
+                    </code></pre>
+
+        </li>
+        <li>
+          Chạy lại:
+          <div class="command">
+            <pre><code id="sail-up">./vendor/bin/sail up -d</code></pre>
+            <button class="copy-button" onclick="copyText('sail-up')">Sao chép</button>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Làm sạch và khởi động lại
+      <p>
+        Lệnh:
+      </p>
+      <div class="command">
+        <pre><code id="sail-down-up-v">./vendor/bin/sail down -v
+./vendor/bin/sail up -d</code></pre>
+        <button class="copy-button" onclick="copyText('sail-down-up-v')">Sao chép</button>
+      </div>
+
+    </li>
+  </ol>
+
+  <h2>II. Lỗi trùng Port 3306 (Thường gặp với MySQL)</h2>
+
+  <p>
+    <b>Nguyên nhân:</b> Port 3306 trên host bị chiếm dụng bởi MySQL cài trực tiếp hoặc container khác.
+  </p>
+
+  <ol>
+    <li>
+      Kiểm tra tiến trình dùng port 3306
+      <p>
+        Lệnh:
+      </p>
+      <div class="command">
+        <pre><code id="netstat-3306">sudo netstat -tulnp | grep 3306</code></pre>
+        <button class="copy-button" onclick="copyText('netstat-3306')">Sao chép</button>
+      </div>
+      <ul>
+        <li>
+          Nếu thấy mysqld:
+          <p>
+            Dừng dịch vụ:
+          </p>
+          <div class="command">
+            <pre><code id="stop-mysql">sudo systemctl stop mysql</code></pre>
+            <button class="copy-button" onclick="copyText('stop-mysql')">Sao chép</button>
+          </div>
+          <p>
+            Tắt khởi động cùng hệ thống (nếu không cần):
+          </p>
+          <div class="command">
+            <pre><code id="disable-mysql">sudo systemctl disable mysql</code></pre>
+            <button class="copy-button" onclick="copyText('disable-mysql')">Sao chép</button>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Kiểm tra container Docker khác
+      <p>
+        Lệnh:
+      </p>
+      <div class="command">
+        <pre><code id="docker-ps-3306">docker ps</code></pre>
+        <button class="copy-button" onclick="copyText('docker-ps-3306')">Sao chép</button>
+      </div>
+      <ul>
+        <li>
+          Nếu thấy container khác dùng 0.0.0.0:3306->3306/tcp:
+          <p>
+            Dừng container:
+          </p>
+          <div class="command">
+            <pre><code id="docker-stop-3306">docker stop &lt;container_id&gt;</code></pre>
+            <button class="copy-button" onclick="copyText('docker-stop-3306')">Sao chép</button>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Thay đổi port trong Laravel Sail
+      <ul>
+        <li>
+          Mở file .env, thêm/sửa:
+          <div class="command">
+            <pre><code id="forward-db-port">FORWARD_DB_PORT=33060</code></pre>
+            <button class="copy-button" onclick="copyText('forward-db-port')">Sao chép</button>
+          </div>
+        </li>
+        <li>
+          Dừng và chạy lại Sail:
+          <div class="command">
+            <pre><code id="sail-down-up-3306">./vendor/bin/sail down
+./vendor/bin/sail up -d</code></pre>
+            <button class="copy-button" onclick="copyText('sail-down-up-3306')">Sao chép</button>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Sửa trực tiếp trong docker-compose.yml (nếu cần)
+      <ul>
+        <li>
+          Mở file docker-compose.yml, tìm dịch vụ mysql:
+          <pre><code>
+ports:
+  - "33060:3306"  # Thay 3306:3306 thành 33060:3306
+                    </code></pre>
+        </li>
+        <li>
+          Chạy lại:
+          <div class="command">
+            <pre><code id="sail-up-3306">./vendor/bin/sail up -d</code></pre>
+            <button class="copy-button" onclick="copyText('sail-up-3306')">Sao chép</button>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Làm sạch và khởi động lại
+      <p>
+        Lệnh:
+      </p>
+      <div class="command">
+        <pre><code id="sail-down-up-v-3306">./vendor/bin/sail down -v
+  ./vendor/bin/sail up -d</code></pre>
+        <button class="copy-button" onclick="copyText('sail-down-up-v-3306')">Sao chép</button>
+      </div>
+    </li>
+  </ol>
+
+  <h2>III. Kiểm tra kết quả</h2>
+  <ul>
+    <li>
+      Xem container đang chạy:
+      <div class="command">
+        <pre><code id="docker-ps-final">docker ps</code></pre>
+        <button class="copy-button" onclick="copyText('docker-ps-final')">Sao chép</button>
+      </div>
+    </li>
+    <li>
+      Nếu port đã ánh xạ đúng (ví dụ: 0.0.0.0:8000->80/tcp, 0.0.0.0:33060->3306/tcp), lỗi đã được khắc phục. [cite: 91,
+      92]
+    </li>
+    <li>
+      Xem log nếu vẫn có vấn đề:
+      <div class="command">
+        <pre><code id="sail-logs-laravel">./vendor/bin/sail logs laravel.test</code></pre>
+        <button class="copy-button" onclick="copyText('sail-logs-laravel')">Sao chép</button>
+      </div>
+      <div class="command">
+        <pre><code id="sail-logs-mysql">./vendor/bin/sail logs mysql</code></pre>
+        <button class="copy-button" onclick="copyText('sail-logs-mysql')">Sao chép</button>
+      </div>
+    </li>
+  </ul>
+
+  <p>
+    --- HẾT ---
+  </p>
+
+  <script>
+    function copyText(elementId) {
+        const text = document.getElementById(elementId).textContent.trim();
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // Tạo một thông báo
+        const message = document.createElement('div');
+        message.textContent = 'Đã sao chép vào clipboard!';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = '#4CAF50';
+        message.style.color = 'white';
+        message.style.padding = '10px 20px';
+        message.style.borderRadius = '5px';
+        message.style.zIndex = '1000'; // Đảm bảo nó ở trên cùng
+
+        document.body.appendChild(message);
+
+        // Ẩn thông báo sau 1.5 giây
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 500); // Đợi khi hiệu ứng mờ kết thúc
+        }, 1500);
+    }
+  </script>
+</body>
+
+</html>

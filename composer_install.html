@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng dẫn cài đặt Composer trên Ubuntu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 2em auto;
+            max-width: 800px;
+            padding: 0 1em;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 0.5em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 1em;
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: 0.5em;
+            overflow-x: auto;
+            border: 1px solid #ccc;
+        }
+
+        code {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        ol {
+            margin-bottom: 1em;
+        }
+
+        .important {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .note {
+            color: #1976d2;
+            font-style: italic;
+        }
+
+        .command {
+            background-color: #e0f7fa;
+            border-left: 5px solid #4dd0e1;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .output {
+            background-color: #fbe9e7;
+            border-left: 5px solid #ffab91;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.25em 0.5em;
+            border: none;
+            cursor: pointer;
+            float: right;
+            border-radius: 5px;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Hướng dẫn cài đặt Composer trên Ubuntu</h1>
+
+    <p>
+        Hướng dẫn này sẽ giúp bạn cài đặt Composer, một trình quản lý gói phụ thuộc cho PHP, trên hệ thống Ubuntu của
+        bạn.
+    </p>
+
+    <h2>1. Cài đặt các gói cần thiết</h2>
+
+    <p>
+        Trước khi cài đặt Composer, bạn cần đảm bảo rằng PHP và một số gói phụ thuộc khác đã được cài đặt.
+    </p>
+
+    <h3>Các bước thực hiện:</h3>
+
+    <ol>
+        <li>
+            Đảm bảo rằng PHP đã được cài đặt trên hệ thống của bạn.
+        </li>
+        <li>
+            Mở Terminal (bạn có thể sử dụng tổ hợp phím Ctrl + Alt + T).
+        </li>
+        <li>
+            Chạy lệnh sau để cài đặt `curl` và `unzip`:
+            <div class="command">
+                <pre><code id="install-curl-unzip">sudo apt install curl unzip -y</code></pre>
+                <button class="copy-button" onclick="copyText('install-curl-unzip')">Sao chép</button>
+            </div>
+            <p>
+            <ul>
+                <li>
+                    `curl` là một công cụ dòng lệnh để tải dữ liệu từ hoặc đến máy chủ.
+                </li>
+                <li>
+                    `unzip` là một công cụ dòng lệnh để giải nén các file zip.
+                </li>
+                <li>
+                    Tùy chọn `-y` tự động trả lời "yes" cho các lời nhắc cài đặt.
+                </li>
+            </ul>
+            </p>
+        </li>
+    </ol>
+
+    <h2>2. Tải và cài đặt Composer</h2>
+
+    <p>
+        Bây giờ, chúng ta sẽ tải xuống và cài đặt Composer.
+    </p>
+
+    <h3>Các bước thực hiện:</h3>
+
+    <ol>
+        <li>
+            Tải xuống script cài đặt Composer:
+            <div class="command">
+                <pre><code id="download-composer-setup">curl -sS https://getcomposer.org/installer -o composer-setup.php</code></pre>
+                <button class="copy-button" onclick="copyText('download-composer-setup')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    `curl` được sử dụng để tải script cài đặt từ URL `https://getcomposer.org/installer`.
+                </li>
+                <li>
+                    `-sS` là các tùy chọn để tắt đầu ra và chỉ hiển thị lỗi.
+                </li>
+                <li>
+                    `-o composer-setup.php` chỉ định tên file đầu ra là `composer-setup.php`.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Cài đặt Composer trên toàn hệ thống:
+            <div class="command">
+                <pre><code id="install-composer-globally">sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer</code></pre>
+                <button class="copy-button" onclick="copyText('install-composer-globally')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    `php composer-setup.php` chạy script cài đặt Composer bằng PHP.
+                </li>
+                <li>
+                    `--install-dir=/usr/local/bin` chỉ định thư mục cài đặt là `/usr/local/bin`, một thư mục chuẩn cho
+                    các file thực thi trên toàn hệ thống.
+                </li>
+                <li>
+                    `--filename=composer` chỉ định tên của file thực thi Composer là `composer`.
+                </li>
+                <li>
+                    `sudo` được sử dụng để cấp quyền quản trị cho lệnh, cho phép cài đặt Composer trên toàn hệ thống.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Xóa script cài đặt tạm thời:
+            <div class="command">
+                <pre><code id="remove-composer-setup">rm composer-setup.php</code></pre>
+                <button class="copy-button" onclick="copyText('remove-composer-setup')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    `rm` là lệnh để xóa file.
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>3. Kiểm tra cài đặt Composer</h2>
+
+    <p>
+        Để xác minh rằng Composer đã được cài đặt thành công, hãy kiểm tra phiên bản của nó.
+    </p>
+
+    <h3>Các bước thực hiện:</h3>
+
+    <ol>
+        <li>
+            Chạy lệnh sau:
+            <div class="command">
+                <pre><code id="check-composer-version">composer --version</code></pre>
+                <button class="copy-button" onclick="copyText('check-composer-version')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Bạn sẽ thấy đầu ra tương tự như sau:
+            <div class="output">
+                <pre><code>Composer version 2.7.1 2024-03-22T16:49:55+00:00</code></pre>
+            </div>
+        </li>
+    </ol>
+
+    <h2>4. (Tùy chọn) Cập nhật Composer</h2>
+
+    <p>
+        Để cập nhật Composer lên phiên bản mới nhất, hãy chạy lệnh sau:
+    </p>
+
+    <ol>
+        <li>
+            Chạy lệnh:
+            <div class="command">
+                <pre><code id="update-composer">sudo composer self-update</code></pre>
+                <button class="copy-button" onclick="copyText('update-composer')">Sao chép</button>
+            </div>
+        </li>
+    </ol>
+
+    <h2>5. Thử sử dụng Composer</h2>
+
+    <p>
+        Bây giờ, chúng ta sẽ thử sử dụng Composer để tạo một dự án PHP đơn giản và thêm một thư viện phụ thuộc.
+    </p>
+
+    <h3>Các bước thực hiện:</h3>
+
+    <ol>
+        <li>
+            Tạo một thư mục dự án mới:
+            <div class="command">
+                <pre><code id="create-project-dir">mkdir php-project</code></pre>
+                <button class="copy-button" onclick="copyText('create-project-dir')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Chuyển đến thư mục dự án:
+            <div class="command">
+                <pre><code id="change-to-project-dir">cd php-project</code></pre>
+                <button class="copy-button" onclick="copyText('change-to-project-dir')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Khởi tạo một dự án Composer mới:
+            <div class="command">
+                <pre><code id="init-composer-project">composer init</code></pre>
+                <button class="copy-button" onclick="copyText('init-composer-project')">Sao chép</button>
+            </div>
+            <p>
+                Bạn có thể nhấn Enter để chấp nhận các giá trị mặc định cho hầu hết các tùy chọn.
+            </p>
+        </li>
+        <li>
+            Thêm một thư viện phụ thuộc (ví dụ: Monolog, một thư viện ghi nhật ký):
+            <div class="command">
+                <pre><code id="require-monolog">composer require monolog/monolog</code></pre>
+                <button class="copy-button" onclick="copyText('require-monolog')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Kết quả:
+            <ul>
+                <li>
+                    Composer sẽ tạo một file `composer.json` trong thư mục dự án của bạn, chứa thông tin về các phụ
+                    thuộc của dự án.
+                </li>
+                <li>
+                    Composer cũng sẽ tạo một thư mục `vendor`, nơi các thư viện phụ thuộc được tải xuống và cài đặt.
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Kết quả</h2>
+
+    <p>
+        Sau khi hoàn thành các bước trên, Composer đã được cài đặt thành công và sẵn sàng để quản lý các thư viện PHP
+        trong dự án của bạn.
+    </p>
+
+    <h2>Xử lý lỗi</h2>
+
+    <p>
+        Dưới đây là một số vấn đề phổ biến và cách khắc phục chúng:
+    </p>
+
+    <ul>
+        <li>
+            <b>PHP không chạy:</b>
+            <ul>
+                <li>
+                    Kiểm tra xem PHP đã được cài đặt đúng cách bằng cách chạy lệnh `php -v`.
+                </li>
+                <li>
+                    Nếu PHP chưa được cài đặt, hãy cài đặt nó bằng lệnh `sudo apt install php`.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Lỗi Composer:</b>
+            <ul>
+                <li>
+                    Đảm bảo rằng `curl` và `unzip` đã được cài đặt bằng lệnh `sudo apt install curl unzip -y`.
+                </li>
+                <li>
+                    Nếu bạn gặp bất kỳ lỗi nào trong quá trình cài đặt Composer, hãy thử tải lại script cài đặt từ
+                    `https://getcomposer.org/installer`.
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <script>
+        function copyText(elementId) {
+        const text = document.getElementById(elementId).textContent.trim();
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // Tạo một thông báo
+        const message = document.createElement('div');
+        message.textContent = 'Đã sao chép vào clipboard!';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = '#4CAF50';
+        message.style.color = 'white';
+        message.style.padding = '10px 20px';
+        message.style.borderRadius = '5px';
+        message.style.zIndex = '1000'; // Đảm bảo nó ở trên cùng
+
+        document.body.appendChild(message);
+
+        // Ẩn thông báo sau 1.5 giây
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 500); // Đợi khi hiệu ứng mờ kết thúc
+        }, 1500);
+    }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiết lập SSH Key cho Git</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 2em auto;
+            max-width: 800px;
+            padding: 0 1em;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 0.5em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            color: #666;
+            margin-top: 1em;
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: 0.5em;
+            overflow-x: auto;
+            border: 1px solid #ccc;
+        }
+
+        code {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        ol {
+            margin-bottom: 1em;
+        }
+
+        .important {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .note {
+            color: #1976d2;
+            font-style: italic;
+        }
+
+        .command {
+            background-color: #e0f7fa;
+            border-left: 5px solid #4dd0e1;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .output {
+            background-color: #fbe9e7;
+            border-left: 5px solid #ffab91;
+            padding: 0.5em;
+            margin: 0.5em 0;
+        }
+
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.25em 0.5em;
+            border: none;
+            cursor: pointer;
+            float: right;
+            border-radius: 5px;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Thiết lập và "đăng nhập" tài khoản Git</h1>
+
+    <p>
+        Hướng dẫn này sẽ giúp bạn thiết lập và "đăng nhập" vào tài khoản Git của mình, đặc biệt là cách tạo và sử dụng
+        SSH key để xác thực.
+    </p>
+
+    <h2>1. Kiểm tra Git</h2>
+
+    <p>
+        Trước khi bắt đầu, hãy đảm bảo rằng Git đã được cài đặt trên hệ thống của bạn.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Chạy lệnh sau trong Terminal:
+            <div class="command">
+                <pre><code id="check-git-version">git --version</code></pre>
+                <button class="copy-button" onclick="copyText('check-git-version')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Nếu bạn thấy thông tin phiên bản Git (ví dụ: `git version 2.34.1`), điều đó có nghĩa là Git đã sẵn sàng để
+            sử dụng. [cite: 1]
+        </li>
+    </ol>
+
+    <h2>2. Cấu hình thông tin người dùng</h2>
+
+    <p>
+        Bạn cần cấu hình tên người dùng và địa chỉ email của mình cho Git.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Chạy các lệnh sau trong Terminal:
+            <div class="command">
+                <pre><code id="config-user-info">git config --global user.name "Tên của bạn"
+git config --global user.email "email@example.com"</code></pre>
+                <button class="copy-button" onclick="copyText('config-user-info')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Thay `"Tên của bạn"` bằng tên thật hoặc biệt danh của bạn.
+                </li>
+                <li>
+                    Thay `"email@example.com"` bằng địa chỉ email của bạn.
+                </li>
+                <li>
+                    <b>Lưu ý:</b> Địa chỉ email này nên trùng với địa chỉ email được liên kết với tài khoản GitHub của
+                    bạn. [cite: 2]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Kiểm tra cấu hình bằng lệnh sau:
+            <div class="command">
+                <pre><code id="check-config">git config --list</code></pre>
+                <button class="copy-button" onclick="copyText('check-config')">Sao chép</button>
+            </div>
+        </li>
+    </ol>
+
+    <h2>3. Tạo SSH Key (Khuyến nghị)</h2>
+
+    <p>
+        Sử dụng SSH key được khuyến nghị để xác thực với GitHub vì nó an toàn hơn so với việc sử dụng mật khẩu. [cite:
+        2]
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Tạo SSH key bằng lệnh sau:
+            <div class="command">
+                <pre><code id="generate-ssh-key">ssh-keygen -t ed25519 -C "your_email@example.com"</code></pre>
+                <button class="copy-button" onclick="copyText('generate-ssh-key')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Thay `"your_email@example.com"` bằng địa chỉ email của bạn.
+                </li>
+                <li>
+                    Nếu hệ thống của bạn không hỗ trợ `ed25519`, bạn có thể sử dụng `rsa` thay thế:
+                    <div class="command">
+                        <pre><code>ssh-keygen -t rsa -b 4096 -C "your_email@example.com"</code></pre>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li>
+            Nhấn Enter để sử dụng các giá trị mặc định cho tên file và vị trí lưu trữ key. Bạn có thể bỏ qua việc đặt
+            passphrase (mật khẩu bảo vệ key) nếu muốn. [cite: 2]
+        </li>
+        <li>
+            Khởi động SSH agent:
+            <div class="command">
+                <pre><code id="start-ssh-agent">eval "$(ssh-agent -s)"</code></pre>
+                <button class="copy-button" onclick="copyText('start-ssh-agent')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Thêm SSH key vào SSH agent:
+            <div class="command">
+                <pre><code id="add-ssh-key">ssh-add ~/.ssh/id_ed25519</code></pre>
+                <button class="copy-button" onclick="copyText('add-ssh-key')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Nếu bạn đã tạo key RSA, hãy thay `id_ed25519` bằng `id_rsa`. [cite: 3]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Sao chép nội dung của public key:
+            <div class="command">
+                <pre><code id="copy-ssh-key">cat ~/.ssh/id_ed25519.pub</code></pre>
+                <button class="copy-button" onclick="copyText('copy-ssh-key')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Nếu bạn đã tạo key RSA, hãy thay `id_ed25519.pub` bằng `id_rsa.pub`. [cite: 3]
+                </li>
+                <li>
+                    Sao chép toàn bộ nội dung của key, bắt đầu bằng `ssh-ed25519` hoặc `ssh-rsa` và kết thúc bằng địa
+                    chỉ email của bạn.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Thêm public key vào tài khoản GitHub của bạn:
+            <ul>
+                <li>
+                    Truy cập trang web GitHub và đăng nhập.
+                </li>
+                <li>
+                    Đi tới **Settings** > **SSH and GPG keys**.
+                </li>
+                <li>
+                    Nhấp vào **New SSH key**.
+                </li>
+                <li>
+                    Dán nội dung của public key vào trường **Key**.
+                </li>
+                <li>
+                    Nhấp vào **Add SSH key**. [cite: 3]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Kiểm tra kết nối SSH:
+            <div class="command">
+                <pre><code id="test-ssh-connection">ssh -T git@github.com</code></pre>
+                <button class="copy-button" onclick="copyText('test-ssh-connection')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Nếu bạn thấy thông báo chào mừng có tên người dùng của bạn (ví dụ: `Hi username!`), điều đó có nghĩa
+                    là bạn đã thiết lập SSH key thành công. [cite: 4]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Xử lý lỗi</h2>
+
+    <ul>
+        <li>
+            <b>Lỗi SSH:</b>
+            <ul>
+                <li>
+                    Sử dụng lệnh sau để xem thông tin chi tiết về kết nối SSH:
+                    <div class="command">
+                        <pre><code>ssh -vT git@github.com</code></pre>
+                        <button class="copy-button" onclick="copyText('debug-ssh')">Sao chép</button>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Lỗi "Permission denied (publickey)":</b>
+            <ul>
+                <li>
+                    Kiểm tra kỹ xem public key bạn đã thêm vào GitHub có khớp với private key bạn đang sử dụng trên máy
+                    tính của mình không. [cite: 6]
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Lỗi "Host key verification failed.":</b>
+            <ul>
+                <li>
+                    Thêm GitHub vào danh sách known_hosts:
+                    <div class="command">
+                        <pre><code id="add-github-to-known_hosts">ssh-keyscan github.com >> ~/.ssh/known_hosts</code></pre>
+                        <button class="copy-button" onclick="copyText('add-github-to-known_hosts')">Sao chép</button>
+                    </div>
+                    (Chạy lệnh này nếu bạn gặp lỗi trên khi chạy lệnh kiểm tra SSH connection và không thấy "Hi
+                    username!") [cite: 7]
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>4. Kết nối Repository</h2>
+
+    <p>
+        Bây giờ bạn có thể sử dụng SSH để clone và tương tác với các repository trên GitHub.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Clone một repository:
+            <div class="command">
+                <pre><code id="clone-repo">git clone git@github.com:username/repository.git</code></pre>
+                <button class="copy-button" onclick="copyText('clone-repo')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Thay `username` bằng tên người dùng GitHub của bạn và `repository` bằng tên của repository bạn muốn
+                    clone. [cite: 4]
+                </li>
+            </ul>
+        </li>
+        <li>
+            Thêm remote origin (nếu cần):
+            <div class="command">
+                <pre><code id="add-remote-origin">git remote add origin git@github.com:username/repository.git</code></pre>
+                <button class="copy-button" onclick="copyText('add-remote-origin')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Lệnh này thiết lập remote `origin` để trỏ đến repository trên GitHub. [cite: 4]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>5. Push thử</h2>
+
+    <p>
+        Để đảm bảo mọi thứ hoạt động chính xác, hãy thử push một thay đổi nhỏ lên repository.
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Chuyển đến thư mục của repository:
+            <div class="command">
+                <pre><code id="cd-to-repo">cd repository</code></pre>
+                <button class="copy-button" onclick="copyText('cd-to-repo')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Tạo một file thử:
+            <div class="command">
+                <pre><code id="create-test-file">echo "Test" > test.txt</code></pre>
+                <button class="copy-button" onclick="copyText('create-test-file')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Thêm file vào staging area và commit:
+            <div class="command">
+                <pre><code id="add-and-commit">git add test.txt && git commit -m "Test commit"</code></pre>
+                <button class="copy-button" onclick="copyText('add-and-commit')">Sao chép</button>
+            </div>
+        </li>
+        <li>
+            Push thay đổi lên remote repository:
+            <div class="command">
+                <pre><code id="push-to-origin">git push origin main</code></pre>
+                <button class="copy-button" onclick="copyText('push-to-origin')">Sao chép</button>
+            </div>
+            <ul>
+                <li>
+                    Nếu không có lỗi, điều đó có nghĩa là bạn đã thiết lập thành công. [cite: 5]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>6. (Tùy chọn) Sử dụng Personal Access Token (PAT) thay cho SSH</h2>
+
+    <p>
+        Ngoài SSH key, bạn cũng có thể sử dụng Personal Access Token (PAT) để xác thực với GitHub qua HTTPS. Tuy nhiên,
+        SSH được khuyến nghị vì lý do bảo mật. [cite: 4, 6]
+    </p>
+
+    <h3>Cách thực hiện:</h3>
+
+    <ol>
+        <li>
+            Tạo Personal Access Token trên GitHub:
+            <ul>
+                <li>
+                    Truy cập trang web GitHub và đăng nhập.
+                </li>
+                <li>
+                    Đi tới **Settings** > **Developer settings** > **Personal access tokens** > **Generate new token**.
+                    [cite: 4]
+                </li>
+                <li>
+                    Chọn các phạm vi (scopes) phù hợp cho token của bạn (ví dụ: `repo` để truy cập repository).
+                </li>
+                <li>
+                    Sao chép token và lưu trữ nó ở một nơi an toàn.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Khi được yêu cầu tên người dùng và mật khẩu, hãy sử dụng:
+            <ul>
+                <li>
+                    **Username:** Tên người dùng GitHub của bạn.
+                </li>
+                <li>
+                    **Password:** Personal Access Token bạn vừa tạo. [cite: 6]
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Kết quả</h2>
+
+    <p>
+        Bạn đã kết nối thành công Git với GitHub bằng SSH key hoặc Personal Access Token. [cite: 5] Bây giờ bạn có thể
+        dễ dàng clone, push và pull các repository. [cite: 6]
+    </p>
+
+    <script>
+        function copyText(elementId) {
+        const text = document.getElementById(elementId).textContent.trim();
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // Tạo một thông báo
+        const message = document.createElement('div');
+        message.textContent = 'Đã sao chép vào clipboard!';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = '#4CAF50';
+        message.style.color = 'white';
+        message.style.padding = '10px 20px';
+        message.style.borderRadius = '5px';
+        message.style.zIndex = '1000'; // Đảm bảo nó ở trên cùng
+
+        document.body.appendChild(message);
+
+        // Ẩn thông báo sau 1.5 giây
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 500); // Đợi khi hiệu ứng mờ kết thúc
+        }, 1500);
+    }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Các Lệnh WSL Thường Dùng</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 2em auto;
+            max-width: 800px;
+            padding: 0 1em;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        .command-group {
+            margin-bottom: 15px;
+        }
+
+        .command-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .command {
+            background-color: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 1em;
+            margin-right: 10px;
+            flex-grow: 1;
+        }
+
+        .description {
+            flex-grow: 2;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+
+        .copied {
+            background-color: #008CBA;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Các Lệnh WSL Thường Dùng</h1>
+
+    <h2>Tương tác cơ bản với WSL</h2>
+    <div class="command-group">
+        <div class="command-item">
+            <div class="command">wsl</div>
+            <div class="description">Mở shell mặc định.</div>
+            <button class="copy-button" onclick="copyCommand('wsl', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">wsl &lt;command&gt;</div>
+            <div class="description">Chạy lệnh Linux từ CMD/PowerShell.</div>
+            <button class="copy-button" onclick="copyCommand('wsl &lt;command&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">wsl -d &lt;DistributionName&gt;</div>
+            <div class="description">Mở shell cho bản phân phối cụ thể.</div>
+            <button class="copy-button" onclick="copyCommand('wsl -d &lt;DistributionName&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">wsl --list</div>
+            <div class="description">Liệt kê các bản phân phối đã cài đặt.</div>
+            <button class="copy-button" onclick="copyCommand('wsl --list', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">wsl --list --verbose</div>
+            <div class="description">Liệt kê chi tiết các bản phân phối.</div>
+            <button class="copy-button" onclick="copyCommand('wsl --list --verbose', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">wsl --setdefault &lt;DistributionName&gt;</div>
+            <div class="description">Đặt bản phân phối mặc định.</div>
+            <button class="copy-button" onclick="copyCommand('wsl --setdefault &lt;DistributionName&gt;', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">wsl --unregister &lt;DistributionName&gt;</div>
+            <div class="description">Gỡ cài đặt bản phân phối (xóa dữ liệu!).</div>
+            <button class="copy-button" onclick="copyCommand('wsl --unregister &lt;DistributionName&gt;', this)">Sao
+                chép</button>
+        </div>
+        <!-- Thêm phần Sao lưu và phục hồi WSL vào đây -->
+        <div class="command-item">
+            <div class="command">wsl --export &lt;DistributionName&gt; &lt;FileName&gt;</div>
+            <div class="description">Sao lưu bản phân phối vào file tar.</div>
+            <button class="copy-button" onclick="copyCommand('wsl --export &lt;DistributionName&gt; &lt;FileName&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">wsl --import &lt;DistributionName&gt; &lt;InstallLocation&gt; &lt;FileName&gt;</div>
+            <div class="description">Phục hồi bản phân phối từ file tar.</div>
+            <button class="copy-button" onclick="copyCommand('wsl --import &lt;DistributionName&gt; &lt;InstallLocation&gt; &lt;FileName&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">exit</div>
+            <div class="description">Đóng shell WSL.</div>
+            <button class="copy-button" onclick="copyCommand('exit', this)">Sao chép</button>
+        </div>
+    </div>
+
+    <h2>Quản lý file và thư mục</h2>
+    <div class="command-group">
+        <div class="command-item">
+            <div class="command">cd &lt;path&gt;</div>
+            <div class="description">Thay đổi thư mục làm việc.</div>
+            <button class="copy-button" onclick="copyCommand('cd &lt;path&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">ls [-l -a -h -t]</div>
+            <div class="description">Liệt kê file và thư mục.</div>
+            <button class="copy-button" onclick="copyCommand('ls [-l -a -h -t]', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">pwd</div>
+            <div class="description">Hiển thị đường dẫn thư mục hiện tại.</div>
+            <button class="copy-button" onclick="copyCommand('pwd', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">mkdir &lt;directory_name&gt;</div>
+            <div class="description">Tạo thư mục mới.</div>
+            <button class="copy-button" onclick="copyCommand('mkdir &lt;directory_name&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">rm &lt;file_name&gt; [-r -f]</div>
+            <div class="description">Xóa file hoặc thư mục.</div>
+            <button class="copy-button" onclick="copyCommand('rm &lt;file_name&gt; [-r -f]', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">cp &lt;source&gt; &lt;destination&gt; [-r]</div>
+            <div class="description">Sao chép file hoặc thư mục.</div>
+            <button class="copy-button" onclick="copyCommand('cp &lt;source&gt; &lt;destination&gt; [-r]', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">mv &lt;source&gt; &lt;destination&gt;</div>
+            <div class="description">Di chuyển hoặc đổi tên.</div>
+            <button class="copy-button" onclick="copyCommand('mv &lt;source&gt; &lt;destination&gt;', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">cat &lt;file_name&gt;</div>
+            <div class="description">Hiển thị nội dung file.</div>
+            <button class="copy-button" onclick="copyCommand('cat &lt;file_name&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">less &lt;file_name&gt; / more &lt;file_name&gt;</div>
+            <div class="description">Xem nội dung file theo trang.</div>
+            <button class="copy-button"
+                onclick="copyCommand('less &lt;file_name&gt; / more &lt;file_name&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">nano &lt;file_name&gt; / vim &lt;file_name&gt;</div>
+            <div class="description">Soạn thảo văn bản.</div>
+            <button class="copy-button"
+                onclick="copyCommand('nano &lt;file_name&gt; / vim &lt;file_name&gt;', this)">Sao chép</button>
+        </div>
+    </div>
+
+    <h2>Quản lý gói (thường dùng với Ubuntu)</h2>
+    <div class="command-group">
+        <div class="command-item">
+            <div class="command">sudo apt update</div>
+            <div class="description">Cập nhật danh sách gói.</div>
+            <button class="copy-button" onclick="copyCommand('sudo apt update', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">sudo apt upgrade</div>
+            <div class="description">Nâng cấp các gói đã cài đặt.</div>
+            <button class="copy-button" onclick="copyCommand('sudo apt upgrade', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">sudo apt install &lt;package_name&gt;</div>
+            <div class="description">Cài đặt gói mới.</div>
+            <button class="copy-button" onclick="copyCommand('sudo apt install &lt;package_name&gt;', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">sudo apt remove &lt;package_name&gt;</div>
+            <div class="description">Gỡ cài đặt gói (giữ cấu hình).</div>
+            <button class="copy-button" onclick="copyCommand('sudo apt remove &lt;package_name&gt;', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">sudo apt purge &lt;package_name&gt;</div>
+            <div class="description">Gỡ cài đặt gói (xóa cả cấu hình).</div>
+            <button class="copy-button" onclick="copyCommand('sudo apt purge &lt;package_name&gt;', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">apt search &lt;keyword&gt;</div>
+            <div class="description">Tìm kiếm gói.</div>
+            <button class="copy-button" onclick="copyCommand('apt search &lt;keyword&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">apt show &lt;package_name&gt;</div>
+            <div class="description">Hiển thị thông tin gói.</div>
+            <button class="copy-button" onclick="copyCommand('apt show &lt;package_name&gt;', this)">Sao chép</button>
+        </div>
+    </div>
+
+    <h2>Quản lý tiến trình</h2>
+    <div class="command-group">
+        <div class="command-item">
+            <div class="command">ps aux</div>
+            <div class="description">Liệt kê tất cả tiến trình.</div>
+            <button class="copy-button" onclick="copyCommand('ps aux', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">top / htop</div>
+            <div class="description">Giám sát tiến trình và tài nguyên.</div>
+            <button class="copy-button" onclick="copyCommand('top / htop', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">kill &lt;PID&gt; / kill -9 &lt;PID&gt;</div>
+            <div class="description">Kết thúc tiến trình.</div>
+            <button class="copy-button" onclick="copyCommand('kill &lt;PID&gt; / kill -9 &lt;PID&gt;', this)">Sao
+                chép</button>
+        </div>
+    </div>
+
+    <h2>Mạng</h2>
+    <div class="command-group">
+        <div class="command-item">
+            <div class="command">ip a / ifconfig</div>
+            <div class="description">Thông tin giao diện mạng.</div>
+            <button class="copy-button" onclick="copyCommand('ip a / ifconfig', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">ping &lt;hostname_or_ip&gt;</div>
+            <div class="description">Kiểm tra kết nối mạng.</div>
+            <button class="copy-button" onclick="copyCommand('ping &lt;hostname_or_ip&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">netstat -tulnp / ss -tulnp</div>
+            <div class="description">Thông tin kết nối mạng.</div>
+            <button class="copy-button" onclick="copyCommand('netstat -tulnp / ss -tulnp', this)">Sao chép</button>
+        </div>
+    </div>
+
+    <h2>Quyền và người dùng</h2>
+    <div class="command-group">
+        <div class="command-item">
+            <div class="command">chmod &lt;mode&gt; &lt;file_or_directory&gt;</div>
+            <div class="description">Thay đổi quyền truy cập.</div>
+            <button class="copy-button" onclick="copyCommand('chmod &lt;mode&gt; &lt;file_or_directory&gt;', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">chown &lt;user&gt;:&lt;group&gt; &lt;file_or_directory&gt;</div>
+            <div class="description">Thay đổi sở hữu.</div>
+            <button class="copy-button"
+                onclick="copyCommand('chown &lt;user&gt;:&lt;group&gt; &lt;file_or_directory&gt;', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">sudo</div>
+            <div class="description">Chạy lệnh với quyền root.</div>
+            <button class="copy-button" onclick="copyCommand('sudo', this)">Sao chép</button>
+        </div>
+    </div>
+
+    <h2>Khác</h2>
+    <div class="command-group">
+        <div class="command-item">
+            <div class="command">history</div>
+            <div class="description">Lịch sử lệnh.</div>
+            <button class="copy-button" onclick="copyCommand('history', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">clear</div>
+            <div class="description">Xóa màn hình.</div>
+            <button class="copy-button" onclick="copyCommand('clear', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">grep &lt;pattern&gt; &lt;file&gt; [-r -i]</div>
+            <div class="description">Tìm kiếm văn bản.</div>
+            <button class="copy-button" onclick="copyCommand('grep &lt;pattern&gt; &lt;file&gt; [-r -i]', this)">Sao
+                chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">head &lt;file_name&gt;</div>
+            <div class="description">Xem đầu file.</div>
+            <button class="copy-button" onclick="copyCommand('head &lt;file_name&gt;', this)">Sao chép</button>
+        </div>
+        <div class="command-item">
+            <div class="command">tail &lt;file_name&gt; [-f]</div>
+            <div class="description">Xem cuối file.</div>
+            <button class="copy-button" onclick="copyCommand('tail &lt;file_name&gt; [-f]', this)">Sao chép</button>
+        </div>
+    </div>
+
+    <script>
+        function copyCommand(text, button) {
+            navigator.clipboard.writeText(text).then(function () {
+                button.innerText = 'Đã sao chép!';
+                button.classList.add('copied');
+                setTimeout(function () {
+                    button.innerText = 'Sao chép';
+                    button.classList.remove('copied');
+                }, 1500);
+            }, function (err) {
+                console.error('Không thể sao chép: ', err);
+                button.innerText = 'Lỗi!';
+            });
+        }
+    </script>
+</body>
+
+</html>
