@@ -1,0 +1,65 @@
+Các bước cài đặt Git trên Ubuntu
+
+Bước 1: Mở Terminal
+- Mở Terminal trong Ubuntu (nhấn Ctrl + Alt + T).
+
+Bước 2: Cập nhật danh sách gói phần mềm
+- Để đảm bảo bạn cài phiên bản Git mới nhất:
+  sudo apt update
+
+Bước 3: Cài đặt Git
+- Chạy lệnh sau để cài Git:
+  sudo apt install git -y
+  - Lệnh -y tự động đồng ý với quá trình cài đặt.
+- Đợi vài giây để quá trình hoàn tất. Git sẽ được tải từ kho phần mềm mặc định của Ubuntu.
+
+Bước 4: Kiểm tra cài đặt
+- Kiểm tra phiên bản Git đã cài:
+  git --version
+  - Bạn sẽ thấy kết quả như git version 2.34.1 (hoặc phiên bản mới hơn, tùy theo bản cập nhật của Ubuntu).
+
+Bước 5: Cấu hình Git (Thông tin cơ bản)
+- Sau khi cài đặt, bạn nên thiết lập thông tin cá nhân để Git gắn tên và email của bạn vào các commit:
+  - Thiết lập tên người dùng:
+    git config --global user.name "vuduyhien1992"
+    - Thay "Tên của bạn" bằng tên thật hoặc biệt danh bạn muốn dùng (ví dụ: git config --global user.name "Nguyen Van A").
+  - Thiết lập email:
+    git config --global user.email "vuduyhien1992@gmail.com"
+    - Thay "email@example.com" bằng email của bạn (ví dụ: git config --global user.email "nguyen@example.com").
+  - Kiểm tra cấu hình:
+    git config --list
+    - Bạn sẽ thấy thông tin vừa nhập, như:
+      user.name=Tên của bạn
+      user.email=email@example.com
+
+Bước 6: (Tùy chọn) Kiểm tra Git hoạt động
+- Tạo một thư mục thử nghiệm:
+  mkdir git-test
+  cd git-test
+- Khởi tạo một repository Git:
+  git init
+  - Bạn sẽ thấy thông báo như: Initialized empty Git repository in /home/user/git-test/.git/.
+- Tạo một file thử:
+  echo "Hello Git" > test.txt
+  git add test.txt
+  git commit -m "First commit"
+  - Nếu không có lỗi, Git đã hoạt động hoàn hảo!
+
+Bước 7: (Tùy chọn) Cài đặt công cụ bổ sung
+- Nếu bạn muốn giao diện đồ họa hoặc các công cụ hỗ trợ:
+  - Cài Git GUI:
+    sudo apt install git-gui -y
+    - Chạy bằng lệnh: git gui
+  - Cài Gitk (công cụ xem lịch sử commit):
+    sudo apt install gitk -y
+    - Chạy bằng lệnh: gitk
+
+Kết quả
+- Git đã được cài đặt thành công trên Ubuntu của bạn!
+- Bạn có thể bắt đầu sử dụng Git để clone repository, tạo project mới, hoặc quản lý mã nguồn. Ví dụ:
+  git clone https://github.com/username/repository.git
+
+Nếu gặp vấn đề
+- Lỗi cài đặt: Chạy lại sudo apt update và kiểm tra kết nối mạng.
+- Không thấy lệnh git: Đảm bảo cài đặt hoàn tất bằng sudo apt install git.
+- Gửi mình thông báo lỗi nếu có, mình sẽ hỗ trợ ngay!

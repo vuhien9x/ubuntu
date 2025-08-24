@@ -1,0 +1,37 @@
+1. Cài đặt Laravel Sail
+   - composer require laravel/sail --dev
+
+2. Khởi tạo Sail
+   - php artisan sail:install
+
+
+Hướng dẫn rút gọn lệnh ./vendor/bin/sail thành sail trong Laravel
+
+1. Xác định shell bạn đang dùng
+   Chạy lệnh: echo $SHELL
+   - /bin/bash: Bạn dùng Bash
+   - /bin/zsh: Bạn dùng Zsh (thường trên macOS)
+
+2. Thêm alias vào file cấu hình shell
+   - Bash: File ~/.bashrc hoặc ~/.bash_profile
+   - Zsh: File ~/.zshrc
+   Mở file bằng lệnh: nano ~/.bashrc (hoặc ~/.bash_profile, ~/.zshrc tùy shell)
+
+3. Thêm 1 trong các dòng sau vào cuối file
+   - export PATH="$PATH:./vendor/bin"
+   - alias sail='./vendor/bin/sail'
+   - function sail { .\vendor\bin\sail $args }
+   * Khuyến nghị: nên sử dụng alias hoặc $PATH
+   Lưu file và thoát (Ctrl + O, Enter, Ctrl + X nếu dùng nano)
+
+4. Áp dụng thay đổi
+   Chạy: source ~/.bashrc (hoặc ~/.bash_profile, ~/.zshrc tùy shell)
+
+5. Kiểm tra
+   Gõ sail thay vì ./vendor/bin/sail, ví dụ:
+   - sail up
+   - sail artisan migrate
+
+Lưu ý:
+- Alias chỉ hoạt động trong thư mục dự án chứa ./vendor/bin/sail
+- Nếu ra ngoài thư mục dự án, lệnh sail sẽ không hoạt động do đường dẫn không đúng

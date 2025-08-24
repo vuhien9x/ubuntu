@@ -1,0 +1,99 @@
+SỬA LỖI TRÙNG PORT 80 VÀ 3306 KHI DÙNG DOCKER TRÊN UBUNTU
+
+---
+
+I. LỖI TRÙNG PORT 80 (Thường gặp với Laravel.test)
+Nguyên nhân: Port 80 trên host bị chiếm dụng bởi một dịch vụ khác (Apache, Nginx, hoặc container khác).
+
+1. Kiểm tra tiến trình dùng port 80
+   Lệnh: 
+   - sudo netstat -tulnp | grep :80
+   hoặc
+   - sudo lsof -i :80
+
+   - Nếu thấy Apache/Nginx:
+     Dừng dịch vụ:
+       sudo systemctl stop apache2  # Hoặc nginx
+     Tắt khởi động cùng hệ thống (nếu không cần):
+       sudo systemctl disable apache2  # Hoặc nginx
+
+   - Ngăn dịch vụ tự động khởi động
+     sudo update-rc.d apache2 disable
+     sudo update-rc.d nginx disable
+
+2. Kiểm tra container Docker khác
+   Lệnh: docker ps
+   - Nếu thấy container khác dùng 0.0.0.0:80->80/tcp:
+     Dừng container:
+       docker stop <container_id>
+
+3. Thay đổi port trong Laravel Sail
+   - Mở file .env, thêm/sửa:
+       APP_PORT=8000
+   - Dừng và chạy lại Sail:
+       ./vendor/bin/sail down
+       ./vendor/bin/sail up -d
+   - Truy cập: http://localhost:8000
+
+4. Sửa trực tiếp trong docker-compose.yml (nếu cần)
+   - Mở file docker-compose.yml, tìm dịch vụ laravel.test:
+       ports:
+         - "8000:80"  # Thay 80:80 thành 8000:80
+   - Chạy lại:
+       ./vendor/bin/sail up -d
+
+5. Làm sạch và khởi động lại
+   Lệnh:
+       ./vendor/bin/sail down -v
+       ./vendor/bin/sail up -d
+
+---
+
+II. LỖI TRÙNG PORT 3306 (Thường gặp với MySQL)
+Nguyên nhân: Port 3306 trên host bị chiếm dụng bởi MySQL cài trực tiếp hoặc container khác.
+
+1. Kiểm tra tiến trình dùng port 3306
+   Lệnh: sudo netstat -tulnp | grep 3306
+   - Nếu thấy mysqld:
+     Dừng dịch vụ:
+       sudo systemctl stop mysql
+     Tắt khởi động cùng hệ thống (nếu không cần):
+       sudo systemctl disable mysql
+
+2. Kiểm tra container Docker khác
+   Lệnh: docker ps
+   - Nếu thấy container khác dùng 0.0.0.0:3306->3306/tcp:
+     Dừng container:
+       docker stop <container_id>
+
+3. Thay đổi port trong Laravel Sail
+   - Mở file .env, thêm/sửa:
+       FORWARD_DB_PORT=33060
+   - Dừng và chạy lại Sail:
+       ./vendor/bin/sail down
+       ./vendor/bin/sail up -d
+
+4. Sửa trực tiếp trong docker-compose.yml (nếu cần)
+   - Mở file docker-compose.yml, tìm dịch vụ mysql:
+       ports:
+         - "33060:3306"  # Thay 3306:3306 thành 33060:3306
+   - Chạy lại:
+       ./vendor/bin/sail up -d
+
+5. Làm sạch và khởi động lại
+   Lệnh:
+       ./vendor/bin/sail down -v
+       ./vendor/bin/sail up -d
+
+---
+
+III. KIỂM TRA KẾT QUẢ
+- Xem container đang chạy:
+    docker ps
+- Nếu port đã ánh xạ đúng (ví dụ: 0.0.0.0:8000->80/tcp, 0.0.0.0:33060->3306/tcp), lỗi đã được khắc phục.
+- Xem log nếu vẫn có vấn đề:
+    ./vendor/bin/sail logs laravel.test
+    ./vendor/bin/sail logs mysql
+
+---
+HẾT

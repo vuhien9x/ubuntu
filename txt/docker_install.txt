@@ -1,0 +1,72 @@
+Chuẩn bị trước
+- Máy ảo Ubuntu đã cài sẵn: Mình giả định bạn đã cài đặt xong Ubuntu (phiên bản mới như 20.04 LTS hoặc 22.04 LTS) trên VMware Workstation. Nếu chưa, hãy:
+  - Tải file ISO Ubuntu từ trang chính thức.
+  - Tạo máy ảo mới trong VMware Workstation, chọn file ISO, và làm theo hướng dẫn cài đặt Ubuntu.
+- Kết nối mạng: Đảm bảo máy ảo Ubuntu có kết nối Internet để tải gói cài đặt Docker.
+- Quyền truy cập terminal: Bạn sẽ cần mở terminal trong Ubuntu để chạy các lệnh.
+
+Các bước cài đặt Docker trên Ubuntu
+
+Bước 1: Cập nhật hệ thống Ubuntu
+- Mở Terminal trong Ubuntu (Ctrl + Alt + T).
+- Cập nhật danh sách gói phần mềm:
+  sudo apt update
+- Nâng cấp các gói hiện có lên phiên bản mới nhất:
+  sudo apt upgrade -y
+  (Lệnh -y tự động đồng ý với các thay đổi).
+
+Bước 2: Cài đặt các gói cần thiết
+- Cài một số công cụ hỗ trợ để thêm repository của Docker:
+  sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+
+Bước 3: Thêm khóa GPG và repository của Docker
+- Thêm khóa GPG chính thức của Docker để xác thực:
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+- Thêm repository Docker vào hệ thống:
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+Bước 4: Cài đặt Docker
+- Cập nhật lại danh sách gói sau khi thêm repository:
+  sudo apt update
+- Cài đặt Docker Engine:
+  sudo apt install -y docker-ce docker-ce-cli containerd.io
+  - docker-ce: Phiên bản cộng đồng của Docker.
+  - containerd.io: Công cụ quản lý container.
+
+Bước 5: Kiểm tra Docker đã cài thành công chưa
+- Kiểm tra trạng thái Docker:
+  sudo systemctl status docker
+  - Nếu Docker đang chạy, bạn sẽ thấy trạng thái active (running).
+  - Nhấn Ctrl + C để thoát.
+- Chạy thử container mẫu:
+  sudo docker run hello-world
+  - Lệnh này tải một image thử nghiệm và in thông điệp "Hello from Docker!" nếu thành công.
+
+Bước 6: Cho phép người dùng không root chạy Docker (Tùy chọn)
+- Mặc định, chỉ root hoặc người dùng với sudo mới chạy được Docker. Để tiện hơn:
+  - Thêm user hiện tại vào nhóm docker:
+    sudo usermod -aG docker $USER
+  - Đăng xuất và đăng nhập lại Ubuntu (hoặc khởi động lại máy ảo).
+  - Kiểm tra bằng cách chạy lại lệnh mà không cần sudo:
+    docker run hello-world
+
+Bước 7: (Tùy chọn) Cài đặt Docker Compose
+- Nếu bạn cần Docker Compose để quản lý nhiều container:
+  - Tải phiên bản mới nhất của Docker Compose:
+    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - Phân quyền thực thi:
+    sudo chmod +x /usr/local/bin/docker-compose
+  - Kiểm tra phiên bản:
+    docker-compose --version
+
+Kết quả
+- Nếu mọi thứ suôn sẻ, bạn đã cài đặt thành công Docker trên máy ảo Ubuntu!
+- Bạn có thể bắt đầu sử dụng Docker để chạy container, ví dụ:
+  docker pull ubuntu
+  docker run -it ubuntu bash
+  (Lệnh này tải image Ubuntu và mở shell bên trong container).
+
+Nếu gặp vấn đề
+- Lỗi kết nối mạng: Kiểm tra cấu hình mạng trong VMware (NAT hoặc Bridged).
+- Lỗi cài đặt: Gửi mình thông báo lỗi cụ thể, mình sẽ hỗ trợ tiếp.
+- Docker không khởi động: Chạy sudo systemctl start docker để bật dịch vụ.

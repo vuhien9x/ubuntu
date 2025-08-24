@@ -1,0 +1,39 @@
+Hướng dẫn cài đặt Composer trên Ubuntu
+
+1. Cài các gói cần thiết
+   - Đảm bảo PHP đã cài, chạy:
+     sudo apt install curl unzip -y
+
+2. Tải và cài Composer
+   - Tải script:
+     curl -sS https://getcomposer.org/installer -o composer-setup.php
+   - Cài toàn cục:
+     sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+   - Xóa file tạm:
+     rm composer-setup.php
+
+3. Kiểm tra Composer
+   - Chạy:
+     composer --version
+   - Kết quả ví dụ: Composer version 2.7.1...
+
+4. (Tùy chọn) Cập nhật Composer
+   - Chạy:
+     sudo composer self-update
+
+5. Thử dùng Composer
+   - Tạo thư mục dự án:
+     mkdir php-project
+     cd php-project
+   - Khởi tạo dự án:
+     composer init (Nhấn Enter để dùng mặc định)
+   - Thêm thư viện thử:
+     composer require monolog/monolog
+   - Kết quả: Tạo file composer.json và thư mục vendor
+
+Kết quả:
+   - Composer đã cài thành công và sẵn sàng quản lý thư viện PHP.
+
+Xử lý lỗi:
+   - PHP không chạy: Kiểm tra php -v hoặc cài lại (sudo apt install php)
+   - Composer lỗi: Đảm bảo curl/unzip đã cài, tải lại script nếu cần.

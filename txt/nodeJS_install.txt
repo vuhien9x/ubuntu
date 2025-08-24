@@ -1,0 +1,17 @@
+Sử dụng apt để cài đặt gói NodeJS từ kho phần mềm mặc định của Ubuntu
+
+Cập nhật apt trước:
+	- sudo apt update
+
+Sau đó là cài đặt Node.js:
+	- sudo apt install nodejs
+
+Kiểm tra xem quá trình cài đặt có thành công không:
+	- node -v
+
+Nếu kết quả trả về là số phiên bản của Node.js thì bạn đã thực hiện cài đặt thành công.
+	Output
+	vxx.xx.x
+
+Tiếp theo, npm cũng là thứ hữu dụng mà bạn không nên bỏ qua, đây là trình quản lý gói Node.js, giúp bạn cài đặt các module và package khi làm việc sau này. Bạn có thể cài đặt npm bằng apt với lệnh sau:
+	- sudo apt install npm

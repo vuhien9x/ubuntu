@@ -1,0 +1,89 @@
+SỬA LỖI DNS NỘI BỘ CỦA DOCKER
+(Nguyên nhân: Laravel không thể phân giải tên host "mysql" trong Docker network)
+
+---
+
+### BƯỚC 1: KIỂM TRA TRẠNG THÁI CONTAINER
+1. Chạy lệnh để xem các container đang chạy:
+   docker ps
+   - Đảm bảo cả "ems-laravel.test-1" và "ems-mysql-1" đều có trạng thái "Up".
+   - Nếu "ems-mysql-1" không chạy, xem log:
+     docker logs ems-mysql-1
+   - Khởi động lại nếu cần:
+     docker-compose up -d
+
+---
+
+### BƯỚC 2: KIỂM TRA KẾT NỐI MẠNG
+1. Vì image "sail-8.4/app" không có "ping", dùng "telnet" để kiểm tra:
+   - Cài telnet trong container:
+     docker exec -it ems-laravel.test-1 sh -c "apt-get update && apt-get install -y telnet"
+   - Kiểm tra kết nối tới MySQL:
+     docker exec -it ems-laravel.test-1 telnet mysql 3306
+   - Kết quả:
+     + Nếu thấy "Connected to mysql": Kết nối thành công.
+     + Nếu lỗi "Name or service not known": Mạng có vấn đề.
+
+2. (Tùy chọn) Xác định IP của container "mysql" để kiểm tra thủ công:
+   docker inspect ems-mysql-1 | grep IPAddress
+   - Ghi lại IP (ví dụ: 172.18.0.2).
+
+---
+
+### BƯỚC 3: THỬ DÙNG IP THAY TÊN HOST (TẠM THỜI)
+1. Sửa file ".env":
+   - Tìm dòng: DB_HOST=mysql
+   - Thay bằng: DB_HOST=172.x.x.x (dùng IP từ bước 2)
+2. Chạy lại migration:
+   docker exec -it ems-laravel.test-1 php artisan migrate
+   - Nếu thành công: Vấn đề là DNS. Tiếp tục bước 4.
+   - Nếu vẫn lỗi: Kiểm tra log và thông tin thêm.
+
+---
+
+### BƯỚC 4: KHẮC PHỤC DNS
+#### Cách 1: Tạo lại mạng "sail"
+1. Dừng và xóa mạng:
+   docker-compose down
+   docker network rm ems_sail
+2. Khởi động lại:
+   docker-compose up --build -d
+3. Chạy migration:
+   docker exec -it ems-laravel.test-1 php artisan migrate
+
+#### Cách 2: Thêm DNS thủ công
+1. Sửa file "docker-compose.yml", thêm vào "laravel.test":
+   services:
+     laravel.test:
+       # ... các cấu hình khác ...
+       dns:
+         - 8.8.8.8  # DNS của Google
+         - 8.8.4.4
+2. Khởi động lại:
+   docker-compose down
+   docker-compose up --build -d
+3. Chạy migration:
+   docker exec -it ems-laravel.test-1 php artisan migrate
+
+#### Cách 3: Đảm bảo thứ tự khởi động
+1. Dừng container Laravel:
+   docker stop ems-laravel.test-1
+2. Chờ 10-15 giây, rồi khởi động lại:
+   docker start ems-laravel.test-1
+3. Chạy migration:
+   docker exec -it ems-laravel.test-1 php artisan migrate
+
+---
+
+### BƯỚC 5: KIỂM TRA KẾT QUẢ
+1. Sau khi thử một trong các cách trên, truy cập ứng dụng:
+   http://localhost:8000
+2. Nếu vẫn lỗi, thu thập thông tin:
+   - Kết quả: docker inspect ems-mysql-1 | grep IPAddress
+   - Kết quả: docker exec -it ems-laravel.test-1 telnet mysql 3306
+   - Log: docker logs ems-laravel.test-1
+   - Gửi lại để được hỗ trợ tiếp.
+
+---
+
+HOÀN TẤT
