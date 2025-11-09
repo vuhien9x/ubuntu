@@ -184,9 +184,8 @@
   </p>
 
   <div class="command">
-    <pre><code id="alias-sail">alias sail=&#39;.&#47;vendor&#47;bin&#47;sail&#39;</code></pre>
-    <button class="copy-button" onclick="copyText('alias sail=&#39;.&#47;vendor&#47;bin&#47;sail&#39;', this)">Sao
-      chép</button>
+    <pre><code id="alias-sail">alias sail='./vendor/bin/sail'</code></pre>
+    <button class="copy-button" onclick="copyText(`alias sail='./vendor/bin/sail'`, this)">Sao chép</button>
   </div>
 
   <p>
@@ -250,6 +249,54 @@
     <b>Lưu ý:</b> Alias chỉ hoạt động trong thư mục dự án chứa <code>./vendor/bin/sail</code>. Nếu bạn di chuyển ra
     ngoài thư mục dự án, lệnh <code>sail</code> sẽ không hoạt động.
   </p>
+
+    <h2>6. Lỗi về quyền thực thi (Permission)</h2>
+
+  <p>
+    Nếu khi chạy lệnh <code>./vendor/bin/sail</code> bạn gặp lỗi:
+  </p>
+
+  <div class="output">
+    <pre><code>-bash: ./vendor/bin/sail: Permission denied</code></pre>
+  </div>
+
+  <p>
+    Điều này có nghĩa là file <code>sail</code> chưa được cấp quyền thực thi.  
+    Để khắc phục, hãy chạy hai lệnh sau trong terminal:
+  </p>
+
+  <div class="command">
+    <pre><code>chmod +x vendor/laravel/sail/bin/sail</code></pre>
+    <button class="copy-button" onclick="copyText('chmod +x vendor/laravel/sail/bin/sail', this)">Sao chép</button>
+  </div>
+
+  <div class="command">
+    <pre><code>chmod +x vendor/bin/sail</code></pre>
+    <button class="copy-button" onclick="copyText('chmod +x vendor/bin/sail', this)">Sao chép</button>
+  </div>
+
+  <p>
+    Sau đó thử chạy lại lệnh:
+  </p>
+
+  <div class="command">
+    <pre><code>./vendor/bin/sail up</code></pre>
+    <button class="copy-button" onclick="copyText('./vendor/bin/sail up', this)">Sao chép</button>
+  </div>
+
+  <p>
+    Hoặc
+  </p>
+
+  <div class="command">
+    <pre><code>sail up</code></pre>
+    <button class="copy-button" onclick="copyText('sail up', this)">Sao chép</button>
+  </div>
+
+  <p class="note">
+    Nếu lệnh chạy thành công, lỗi “Permission denied” đã được khắc phục.
+  </p>
+
 
   <script>
     function copyText(text, button) {
