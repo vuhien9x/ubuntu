@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa lỗi VS Code không load trong WSL (Downloading 0%)</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      margin: 2em auto;
+      max-width: 800px;
+      padding: 0 1em;
+      color: #333;
+      background-color: #f8f8f8;
+    }
+
+    h1 {
+      color: #444;
+      text-align: center;
+    }
+
+    h2 {
+      color: #555;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5em;
+      margin-top: 1.5em;
+    }
+
+    h3 {
+      color: #666;
+      margin-top: 1em;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 0.5em;
+      overflow-x: auto;
+      border: 1px solid #ccc;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    ol {
+      margin-bottom: 1em;
+    }
+
+    .important {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+
+    .note {
+      color: #1976d2;
+      font-style: italic;
+    }
+
+    .command {
+      background-color: #e0f7fa;
+      border-left: 5px solid #4dd0e1;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .output {
+      background-color: #fbe9e7;
+      border-left: 5px solid #ffab91;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .copy-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.25em 0.5em;
+      border: none;
+      cursor: pointer;
+      float: right;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
+    .copied {
+      background-color: #008CBA;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sửa lỗi VS Code không load trong WSL (Downloading 0%)</h1>
+
+  <p>
+    Khi bạn chạy lệnh <code>code .</code> trong WSL mà bị kẹt ở dòng <b>"Downloading: 0%"</b>, có thể WSL không kết nối được Internet
+    hoặc bị lỗi DNS, firewall, hay proxy.
+  </p>
+
+  <h2>1. Kiểm tra kết nối mạng trong WSL</h2>
+
+  <p>Chạy lệnh sau để kiểm tra WSL có truy cập mạng được không:</p>
+
+  <div class="command">
+    <pre><code>ping google.com -c 4</code></pre>
+    <button class="copy-button" onclick="copyText('ping google.com -c 4', this)">Sao chép</button>
+  </div>
+
+  <p>Nếu báo lỗi “Temporary failure in name resolution”, DNS của bạn đang bị lỗi.</p>
+
+  <h3>Khắc phục lỗi DNS:</h3>
+
+  <div class="command">
+    <pre><code>sudo nano /etc/resolv.conf</code></pre>
+    <button class="copy-button" onclick="copyText('sudo nano /etc/resolv.conf', this)">Sao chép</button>
+  </div>
+
+  <p>Thêm dòng sau vào đầu file:</p>
+
+  <div class="command">
+    <pre><code>nameserver 8.8.8.8</code></pre>
+    <button class="copy-button" onclick="copyText('nameserver 8.8.8.8', this)">Sao chép</button>
+  </div>
+
+  <p>Sau đó lưu và thử lại lệnh:</p>
+
+  <div class="command">
+    <pre><code>code .</code></pre>
+    <button class="copy-button" onclick="copyText('code .', this)">Sao chép</button>
+  </div>
+
+  <h2>2. Kiểm tra phiên bản WSL</h2>
+
+  <p>Chạy lệnh sau trong PowerShell (Windows):</p>
+
+  <div class="command">
+    <pre><code>wsl -l -v</code></pre>
+    <button class="copy-button" onclick="copyText('wsl -l -v', this)">Sao chép</button>
+  </div>
+
+  <p>
+    Nếu bạn thấy <code>VERSION = 1</code>, hãy nâng cấp lên WSL2 bằng:
+  </p>
+
+  <div class="command">
+    <pre><code>wsl --set-version Ubuntu 2</code></pre>
+    <button class="copy-button" onclick="copyText('wsl --set-version Ubuntu 2', this)">Sao chép</button>
+  </div>
+
+  <h2>3. Xóa VS Code Server lỗi và cài lại</h2>
+
+  <p>Nếu VS Code Server tải dở bị lỗi, hãy xóa nó đi và VS Code sẽ tự cài lại bản mới.</p>
+
+  <div class="command">
+    <pre><code>rm -rf ~/.vscode-server</code></pre>
+    <button class="copy-button" onclick="copyText('rm -rf ~/.vscode-server', this)">Sao chép</button>
+  </div>
+
+  <p>Rồi thử lại:</p>
+
+  <div class="command">
+    <pre><code>code .</code></pre>
+    <button class="copy-button" onclick="copyText('code .', this)">Sao chép</button>
+  </div>
+
+  <h2>4. Cách cài thủ công nếu bị chặn mạng hoặc proxy</h2>
+
+  <ol>
+    <li>
+      Tải file VS Code Server bằng trình duyệt Windows tại:
+      <br>
+      <a href="https://update.code.visualstudio.com/latest/server-linux-x64/stable" target="_blank">
+        https://update.code.visualstudio.com/latest/server-linux-x64/stable
+      </a>
+    </li>
+    <li>
+      Chép file vừa tải vào thư mục WSL:
+    </li>
+
+    <div class="command">
+      <pre><code>cp /mnt/c/Users/&lt;tên_user&gt;/Downloads/vscode-server-linux-x64.tar.gz ~</code></pre>
+      <button class="copy-button" onclick="copyText('cp /mnt/c/Users/<tên_user>/Downloads/vscode-server-linux-x64.tar.gz ~', this)">Sao chép</button>
+    </div>
+
+    <li>Giải nén thủ công:</li>
+
+    <div class="command">
+      <pre><code>
+mkdir -p ~/.vscode-server/bin/ac4cbdf48759c7d8c3eb91ffe6bb04316e263c57
+tar -xzf vscode-server-linux-x64.tar.gz -C ~/.vscode-server/bin/ac4cbdf48759c7d8c3eb91ffe6bb04316e263c57 --strip-components=1
+      </code></pre>
+      <button class="copy-button" onclick="copyText('mkdir -p ~/.vscode-server/bin/ac4cbdf48759c7d8c3eb91ffe6bb04316e263c57 && tar -xzf vscode-server-linux-x64.tar.gz -C ~/.vscode-server/bin/ac4cbdf48759c7d8c3eb91ffe6bb04316e263c57 --strip-components=1', this)">Sao chép</button>
+    </div>
+
+    <li>Rồi chạy lại:</li>
+
+    <div class="command">
+      <pre><code>code .</code></pre>
+      <button class="copy-button" onclick="copyText('code .', this)">Sao chép</button>
+    </div>
+  </ol>
+
+  <h2>5. Kiểm tra firewall hoặc antivirus</h2>
+
+  <p>Nếu bạn đang dùng phần mềm bảo mật (Kaspersky, Avast, Defender...), hãy tạm tắt và thử lại lệnh <code>code .</code>.</p>
+
+  <h2>Kết luận</h2>
+
+  <p class="note">
+    Nếu làm xong các bước trên mà VS Code vẫn không load, thử khởi động lại cả máy hoặc gỡ và cài lại extension <b>Remote - WSL</b> trong VS Code.
+  </p>
+
+  <script>
+    function copyText(text, button) {
+      navigator.clipboard.writeText(text).then(function () {
+        button.innerText = 'Đã sao chép!';
+        button.classList.add('copied');
+        setTimeout(function () {
+          button.innerText = 'Sao chép';
+          button.classList.remove('copied');
+        }, 1500);
+      }, function (err) {
+        console.error('Không thể sao chép: ', err);
+        button.innerText = 'Lỗi!';
+      });
+    }
+  </script>
+</body>
+
+</html>
