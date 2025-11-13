@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa lỗi WSL Ubuntu luôn chạy với quyền root</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      margin: 2em auto;
+      max-width: 800px;
+      padding: 0 1em;
+      color: #333;
+      background-color: #f8f8f8;
+    }
+
+    h1 {
+      color: #444;
+      text-align: center;
+    }
+
+    h2 {
+      color: #555;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5em;
+      margin-top: 1.5em;
+    }
+
+    h3 {
+      color: #666;
+      margin-top: 1em;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 0.5em;
+      overflow-x: auto;
+      border: 1px solid #ccc;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    ol {
+      margin-bottom: 1em;
+    }
+
+    .important {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+
+    .note {
+      color: #1976d2;
+      font-style: italic;
+    }
+
+    .command {
+      background-color: #e0f7fa;
+      border-left: 5px solid #4dd0e1;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .output {
+      background-color: #fbe9e7;
+      border-left: 5px solid #ffab91;
+      padding: 0.5em;
+      margin: 0.5em 0;
+    }
+
+    .copy-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.25em 0.5em;
+      border: none;
+      cursor: pointer;
+      float: right;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
+    .copied {
+      background-color: #008CBA;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sửa lỗi WSL Ubuntu luôn chạy với quyền root</h1>
+
+  <p>
+    Khi bạn mở Ubuntu trong Windows (WSL) mà hệ thống luôn đăng nhập bằng <b>root</b>, hãy làm theo hướng dẫn dưới đây để
+    chuyển về user thường.
+  </p>
+
+  <h2>1. Kiểm tra các user hiện có trong Ubuntu</h2>
+
+  <p>Chạy lệnh sau trong terminal Ubuntu (WSL):</p>
+
+  <div class="command">
+    <pre><code>cat /etc/passwd</code></pre>
+    <button class="copy-button" onclick="copyText('cat /etc/passwd', this)">Sao chép</button>
+  </div>
+
+  <p>Kết quả sẽ liệt kê toàn bộ user trong hệ thống. Ví dụ:</p>
+
+  <div class="output">
+    <pre><code>root:x:0:0:root:/root:/bin/bash
+hoang:x:1000:1000:,,,:/home/hoang:/bin/bash</code></pre>
+  </div>
+
+  <p>Nếu bạn chỉ thấy <code>root</code> mà không có user thường, hãy tạo mới ở bước tiếp theo.</p>
+
+  <h2>2. Tạo user mới</h2>
+
+  <p>Chạy lệnh sau để tạo user mới (ví dụ tên là <code>hoang</code>):</p>
+
+  <div class="command">
+    <pre><code>adduser hoang</code></pre>
+    <button class="copy-button" onclick="copyText('adduser hoang', this)">Sao chép</button>
+  </div>
+
+  <p>Nhập mật khẩu, sau đó nhấn Enter liên tục để bỏ qua các trường thông tin khác.</p>
+
+  <h2>3. Cấp quyền sudo cho user mới</h2>
+
+  <p>Để user mới có thể dùng <code>sudo</code>, chạy lệnh:</p>
+
+  <div class="command">
+    <pre><code>usermod -aG sudo hoang</code></pre>
+    <button class="copy-button" onclick="copyText('usermod -aG sudo hoang', this)">Sao chép</button>
+  </div>
+
+  <h2>4. Thiết lập user mặc định khi mở Ubuntu</h2>
+
+  <p>
+    Đóng Ubuntu, mở <b>PowerShell</b> hoặc <b>Command Prompt</b> trong Windows, chạy lệnh sau để xác định tên distribution:
+  </p>
+
+  <div class="command">
+    <pre><code>wsl -l -v</code></pre>
+    <button class="copy-button" onclick="copyText('wsl -l -v', this)">Sao chép</button>
+  </div>
+
+  <p>Kết quả ví dụ:</p>
+
+  <div class="output">
+    <pre><code>  NAME            STATE           VERSION
+* Ubuntu-22.04     Running         2</code></pre>
+  </div>
+
+  <p>Ghi nhớ tên distribution (ví dụ <code>Ubuntu-22.04</code>), rồi chạy lệnh sau để đổi user mặc định:</p>
+
+  <div class="command">
+    <pre><code>ubuntu2204 config --default-user hoang</code></pre>
+    <button class="copy-button" onclick="copyText('ubuntu2204 config --default-user hoang', this)">Sao chép</button>
+  </div>
+
+  <p class="note">
+    ⚠️ Nếu lệnh trên báo không tồn tại, thay <code>ubuntu2204</code> bằng đúng tên distro bạn thấy ở lệnh <code>wsl -l -v</code>.<br>
+    (Ví dụ: <code>ubuntu</code>, <code>ubuntu2004</code>, <code>ubuntu2204</code>...)
+  </p>
+
+  <h2>5. Kiểm tra lại kết quả</h2>
+
+  <p>Mở lại Ubuntu từ Start Menu hoặc gõ trong PowerShell:</p>
+
+  <div class="command">
+    <pre><code>wsl</code></pre>
+    <button class="copy-button" onclick="copyText('wsl', this)">Sao chép</button>
+  </div>
+
+  <p>Sau đó kiểm tra user hiện tại:</p>
+
+  <div class="command">
+    <pre><code>whoami</code></pre>
+    <button class="copy-button" onclick="copyText('whoami', this)">Sao chép</button>
+  </div>
+
+  <p>Nếu thấy kết quả là tên user mới (ví dụ <code>hoang</code>), nghĩa là đã cấu hình thành công 🎉</p>
+
+  <h2>6. Gợi ý thêm</h2>
+
+  <ul>
+    <li>Nếu muốn đăng nhập tạm thời bằng user khác (không thay mặc định):</li>
+  </ul>
+
+  <div class="command">
+    <pre><code>wsl -d Ubuntu -u hoang</code></pre>
+    <button class="copy-button" onclick="copyText('wsl -d Ubuntu -u hoang', this)">Sao chép</button>
+  </div>
+
+  <ul>
+    <li>Nếu muốn trở lại root mặc định:</li>
+  </ul>
+
+  <div class="command">
+    <pre><code>ubuntu2204 config --default-user root</code></pre>
+    <button class="copy-button" onclick="copyText('ubuntu2204 config --default-user root', this)">Sao chép</button>
+  </div>
+
+  <p class="note">
+    Sau khi thay đổi user mặc định, mọi lần mở Ubuntu trong Windows sẽ tự động dùng user mới thay vì root.
+  </p>
+
+  <script>
+    function copyText(text, button) {
+      navigator.clipboard.writeText(text).then(function () {
+        button.innerText = 'Đã sao chép!';
+        button.classList.add('copied');
+        setTimeout(function () {
+          button.innerText = 'Sao chép';
+          button.classList.remove('copied');
+        }, 1500);
+      }, function (err) {
+        console.error('Không thể sao chép: ', err);
+        button.innerText = 'Lỗi!';
+      });
+    }
+  </script>
+</body>
+
+</html>
